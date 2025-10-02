@@ -1,4 +1,6 @@
 import LazyLoad from "@/components/LazyLoad";
+import ProductDetail from "@/pages/projectManager/ProjectDetail";
+import ProjectList from "@/pages/projectManager/ProjectList";
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -14,6 +16,14 @@ const routers = createBrowserRouter([
     path: "/register",
     element: <LazyLoad children={<Register />} />,
   },
+  {
+    path: "/projects",
+    element: <LazyLoad children={<ProjectList />} />,
+  },
+  {
+    path: "projects/:id",
+    element: <LazyLoad children={<ProductDetail/>}/>,
+  }
 ]);
 
 export default routers;
