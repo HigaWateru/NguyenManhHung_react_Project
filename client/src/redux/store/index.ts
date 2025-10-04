@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit'
 import projectDetailSlice from '../slices/projectDetail.slice'
 import projectListSlice from '../slices/projectList.slice'
+import accountSlice from '../slices/account.slice'
 export const store = configureStore({
     reducer: {
         projectList: projectListSlice,
-        projectDetail: projectDetailSlice
+        projectDetail: projectDetailSlice,
+        account: accountSlice
     }
 })
 

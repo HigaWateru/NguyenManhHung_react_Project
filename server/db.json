@@ -1,151 +1,331 @@
 {
   "users": [
-  {
-    "id": "u1",
-    "username": "Nguyen Van A",
-    "email": "a@example.com",
-    "password": "123456",
-    "projects": [
-      {
-        "id": 1,
-        "name": "Website bán hàng",
-        "image": "shop.png",
-        "description": "Xây dựng website thương mại điện tử",
-        "members": [
-          { "id": "m1", "username": "Nguyen Van A", "role": "Leader" },
-          { "id": "m2", "username": "Tran Thi B", "role": "Developer" }
-        ],
-        "todos": [
-          {
-            "id": "t1",
-            "title": "Thiết kế giao diện",
-            "priority": "high",
-            "personChange": { "id": "m2", "username": "Tran Thi B", "role": "Developer" },
-            "startDate": "2025-10-01",
-            "endDate": "2025-10-10",
-            "progress": "in-progress",
-            "status": "in-progress"
-          },
-          {
-            "id": "t2",
-            "title": "Tích hợp thanh toán",
-            "priority": "medium",
-            "personChange": { "id": "m1", "username": "Nguyen Van A", "role": "Leader" },
-            "startDate": "2025-10-05",
-            "endDate": "2025-10-15",
-            "progress": "scheduled",
-            "status": "to-do"
-          }
-        ]
-      },
-      {
-        "id": 2,
-        "name": "Ứng dụng chat",
-        "image": "chat.png",
-        "description": "Phát triển ứng dụng chat realtime",
-        "members": [
-          { "id": "m1", "username": "Nguyen Van A", "role": "Leader" },
-          { "id": "m3", "username": "Le Van C", "role": "Tester" }
-        ],
-        "todos": [
-          {
-            "id": "t3",
-            "title": "Cài đặt socket server",
-            "priority": "high",
-            "personChange": { "id": "m1", "username": "Nguyen Van A", "role": "Leader" },
-            "startDate": "2025-10-02",
-            "endDate": "2025-10-12",
-            "progress": "scheduled",
-            "status": "to-do"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "u2",
-    "username": "Tran Thi D",
-    "email": "d@example.com",
-    "password": "654321",
-    "projects": [
-      {
-        "id": 3,
-        "name": "Quản lý công việc",
-        "image": "task.png",
-        "description": "Ứng dụng quản lý công việc nhóm",
-        "members": [
-          { "id": "m4", "username": "Tran Thi D", "role": "Leader" },
-          { "id": "m5", "username": "Pham Van E", "role": "Developer" }
-        ],
-        "todos": [
-          {
-            "id": "t4",
-            "title": "Thiết kế database",
-            "priority": "medium",
-            "personChange": { "id": "m4", "username": "Tran Thi D", "role": "Leader" },
-            "startDate": "2025-10-03",
-            "endDate": "2025-10-08",
-            "progress": "in-progress",
-            "status": "in-progress"
-          },
-          {
-            "id": "t5",
-            "title": "Xây dựng API",
-            "priority": "high",
-            "personChange": { "id": "m5", "username": "Pham Van E", "role": "Developer" },
-            "startDate": "2025-10-04",
-            "endDate": "2025-10-14",
-            "progress": "scheduled",
-            "status": "to-do"
-          }
-        ]
-      },
-      {
-        "id": 4,
-        "name": "Ứng dụng học online",
-        "image": "elearning.png",
-        "description": "Phát triển nền tảng học trực tuyến",
-        "members": [
-          { "id": "m4", "username": "Tran Thi D", "role": "Leader" },
-          { "id": "m6", "username": "Hoang Thi F", "role": "Designer" }
-        ],
-        "todos": [
-          {
-            "id": "t6",
-            "title": "Thiết kế UI/UX",
-            "priority": "medium",
-            "personChange": { "id": "m6", "username": "Hoang Thi F", "role": "Designer" },
-            "startDate": "2025-10-05",
-            "endDate": "2025-10-12",
-            "progress": "delayed",
-            "status": "pending"
-          }
-        ]
-      },
-      {
-        "id": 5,
-        "name": "Ứng dụng quản lý chi tiêu",
-        "image": "finance.png",
-        "description": "Quản lý chi tiêu cá nhân",
-        "members": [
-          { "id": "m4", "username": "Tran Thi D", "role": "Leader" },
-          { "id": "m7", "username": "Nguyen Van G", "role": "Tester" }
-        ],
-        "todos": [
-          {
-            "id": "t7",
-            "title": "Tạo báo cáo chi tiêu",
-            "priority": "low",
-            "personChange": { "id": "m7", "username": "Nguyen Van G", "role": "Tester" },
-            "startDate": "2025-10-06",
-            "endDate": "2025-10-10",
-            "progress": "scheduled",
-            "status": "to-do"
-          }
-        ]
-      }
-    ]
-  }
-]
-
+    {
+      "id": "u1",
+      "username": "Nguyen Van A",
+      "email": "a@example.com",
+      "password": "123456",
+      "projects": [
+        {
+          "id": 1,
+          "name": "Website bán hàng",
+          "image": "shop.png",
+          "description": "Xây dựng website thương mại điện tử",
+          "members": [
+            {
+              "id": "m1",
+              "username": "Nguyen Van A",
+              "role": "Leader"
+            },
+            {
+              "id": "m2",
+              "username": "Tran Thi B",
+              "role": "Developer"
+            }
+          ],
+          "todos": [
+            {
+              "id": "t1",
+              "title": "Thiết kế giao diện",
+              "priority": "high",
+              "personChange": {
+                "id": "m2",
+                "username": "Tran Thi B",
+                "role": "Developer"
+              },
+              "startDate": "2025-10-01",
+              "endDate": "2025-10-10",
+              "progress": "in-progress",
+              "status": "in-progress"
+            },
+            {
+              "id": "t2",
+              "title": "Tích hợp thanh toán",
+              "priority": "medium",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-05",
+              "endDate": "2025-10-15",
+              "progress": "scheduled",
+              "status": "to-do"
+            },
+            {
+              "id": "t3",
+              "title": "Tạo database sản phẩm",
+              "priority": "high",
+              "personChange": {
+                "id": "m2",
+                "username": "Tran Thi B",
+                "role": "Developer"
+              },
+              "startDate": "2025-10-07",
+              "endDate": "2025-10-18",
+              "progress": "scheduled",
+              "status": "done"
+            },
+            {
+              "id": "t4",
+              "title": "Đăng nhập bằng Google",
+              "priority": "low",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-08",
+              "endDate": "2025-10-20",
+              "progress": "scheduled",
+              "status": "pending"
+            },
+            {
+              "id": "t5",
+              "title": "Viết tài liệu hướng dẫn",
+              "priority": "low",
+              "personChange": {
+                "id": "m2",
+                "username": "Tran Thi B",
+                "role": "Developer"
+              },
+              "startDate": "2025-10-09",
+              "endDate": "2025-10-11",
+              "progress": "delayed",
+              "status": "pending"
+            },
+            {
+              "id": "t6",
+              "title": "Triển khai hosting",
+              "priority": "medium",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-12",
+              "endDate": "2025-10-22",
+              "progress": "scheduled",
+              "status": "to-do"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Ứng dụng chat",
+          "image": "chat.png",
+          "description": "Phát triển ứng dụng chat realtime",
+          "members": [
+            {
+              "id": "m1",
+              "username": "Nguyen Van A",
+              "role": "Leader"
+            },
+            {
+              "id": "m3",
+              "username": "Le Van C",
+              "role": "Tester"
+            }
+          ],
+          "todos": [
+            {
+              "id": "t7",
+              "title": "Cài đặt socket server",
+              "priority": "high",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-02",
+              "endDate": "2025-10-12",
+              "progress": "scheduled",
+              "status": "to-do"
+            },
+            {
+              "id": "t8",
+              "title": "Xây dựng UI chat",
+              "priority": "medium",
+              "personChange": {
+                "id": "m3",
+                "username": "Le Van C",
+                "role": "Tester"
+              },
+              "startDate": "2025-10-05",
+              "endDate": "2025-10-14",
+              "progress": "in-progress",
+              "status": "in-progress"
+            },
+            {
+              "id": "t9",
+              "title": "Tích hợp gửi ảnh",
+              "priority": "high",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-06",
+              "endDate": "2025-10-16",
+              "progress": "scheduled",
+              "status": "to-do"
+            },
+            {
+              "id": "t10",
+              "title": "Thông báo realtime",
+              "priority": "medium",
+              "personChange": {
+                "id": "m3",
+                "username": "Le Van C",
+                "role": "Tester"
+              },
+              "startDate": "2025-10-08",
+              "endDate": "2025-10-18",
+              "progress": "scheduled",
+              "status": "pending"
+            },
+            {
+              "id": "t11",
+              "title": "Xác thực tài khoản",
+              "priority": "low",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-10",
+              "endDate": "2025-10-20",
+              "progress": "scheduled",
+              "status": "to-do"
+            },
+            {
+              "id": "t12",
+              "title": "Test hiệu năng",
+              "priority": "low",
+              "personChange": {
+                "id": "m3",
+                "username": "Le Van C",
+                "role": "Tester"
+              },
+              "startDate": "2025-10-12",
+              "endDate": "2025-10-22",
+              "progress": "delayed",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Ứng dụng học ReactJS",
+          "image": "chat.png",
+          "description": "Phát triển ứng dụng ReactJS",
+          "members": [
+            {
+              "id": "m1",
+              "username": "Nguyen Van A",
+              "role": "Leader"
+            },
+            {
+              "id": "m3",
+              "username": "Le Van C",
+              "role": "Tester"
+            }
+          ],
+          "todos": [
+            {
+              "id": "t13",
+              "title": "Cài đặt socket server",
+              "priority": "high",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-02",
+              "endDate": "2025-10-12",
+              "progress": "in-progress",
+              "status": "done"
+            },
+            {
+              "id": "14",
+              "title": "Xây dựng UI chat",
+              "priority": "low",
+              "personChange": {
+                "id": "m3",
+                "username": "Le Van C",
+                "role": "Tester"
+              },
+              "startDate": "2025-10-05",
+              "endDate": "2025-10-14",
+              "progress": "in-progress",
+              "status": "pending"
+            },
+            {
+              "id": "t15",
+              "title": "Tích hợp gửi ảnh",
+              "priority": "high",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-06",
+              "endDate": "2025-10-16",
+              "progress": "delayed",
+              "status": "in-progress"
+            },
+            {
+              "id": "t16",
+              "title": "Thông báo realtime",
+              "priority": "medium",
+              "personChange": {
+                "id": "m3",
+                "username": "Le Van C",
+                "role": "Tester"
+              },
+              "startDate": "2025-10-08",
+              "endDate": "2025-10-18",
+              "progress": "delayed",
+              "status": "in-progress"
+            },
+            {
+              "id": "t17",
+              "title": "Xác thực tài khoản",
+              "priority": "low",
+              "personChange": {
+                "id": "m1",
+                "username": "Nguyen Van A",
+                "role": "Leader"
+              },
+              "startDate": "2025-10-10",
+              "endDate": "2025-10-20",
+              "progress": "scheduled",
+              "status": "done"
+            },
+            {
+              "id": "t12",
+              "title": "Test hiệu năng",
+              "priority": "low",
+              "personChange": {
+                "id": "m3",
+                "username": "Le Van C",
+                "role": "Tester"
+              },
+              "startDate": "2025-10-12",
+              "endDate": "2025-10-22",
+              "progress": "delayed",
+              "status": "to-do"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Higa_Wateru",
+      "email": "fc.canhcut1@gmail.com",
+      "password": "123456",
+      "projects": [],
+      "id": "mwtjXMr"
+    }
+  ]
 }

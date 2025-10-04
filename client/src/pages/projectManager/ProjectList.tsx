@@ -19,6 +19,7 @@ export default function ProjectList() {
   }, [dispatch])
 
   const filteredProjects = projectList.filter(project => project.name.toLowerCase().includes(search.toLowerCase()))
+  console.log(projectList)
 
   return <div className="h-[100vh] w-[100vw] flex flex-col justify-between content-between ">
     <Header />

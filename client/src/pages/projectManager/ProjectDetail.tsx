@@ -1,13 +1,26 @@
+import { fetchTodo } from "@/apis/auth.api";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ProjectIntroduce from "@/components/ProjectIntroduce";
+import type { AppDispatch, RootState } from "@/redux/store";
+import type { Todo } from "@/utils/types";
 import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
 import { Select } from "antd";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 export default function ProjectDetail() {
   const [search, setSearch] = React.useState('')
+  const projectTodo = useSelector((state: RootState) => state.projectDetail.project)
+  const dispatch = useDispatch<AppDispatch>()
+  const { id } = useParams<{ id: string }>()
 
+  const [tableOpt, setTableOpt] = React.useState<{todo: boolean, inProgress: boolean, pending: boolean, done: boolean}>({todo: true, inProgress: true, pending: false, done: false})
+
+  React.useEffect(() => {
+    dispatch(fetchTodo(Number(id)))
+  }, [dispatch])
 
   return <div className="h-[100vh] w-[100vw] flex flex-col justify-between  ">
     <Header />
@@ -41,58 +54,90 @@ export default function ProjectDetail() {
             </tr>
           </thead>
           <tbody>
-            <tr className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer"><CaretDownOutlined /> Todo</td></tr>
-            <tr className="">
-              <td className="p-2 border border-gray-300">Soạn thảo đề cương dự án</td>
-              <td className="text-center border border-gray-300">An Nguyễn</td>
-              <td className="text-center border border-gray-300"><span className="text-white font-medium bg-[#0dcaf0] text-[12px] px-2 py-1 rounded">Thấp</span></td>
-              <td className="text-center border border-gray-300 text-blue-500">24/2/2023</td>
-              <td className="text-center border border-gray-300 text-blue-500">24/2/2024</td>
-              <td className="text-center border border-gray-300"><span className="text-white font-medium bg-[#198754] text-[12px] px-2 py-1 rounded">Đúng tiến độ</span></td>
-              <td className="text-center border border-gray-300"><div className="flex justify-center gap-3 ">
-                <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
-                <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
-              </div></td>
-            </tr>
-            <tr className="">
-              <td className="p-2 border border-gray-300">Soạn thảo đề cương dự án</td>
-              <td className="text-center border border-gray-300">An Nguyễn</td>
-              <td className="text-center border border-gray-300"><span className="text-white font-medium bg-[#ffa500] text-[12px] px-2 py-1 rounded">Trung bình</span></td>
-              <td className="text-center border border-gray-300 text-blue-500">24/2/2023</td>
-              <td className="text-center border border-gray-300 text-blue-500">24/2/2024</td>
-              <td className="text-center border border-gray-300"><span className="text-white font-medium bg-[#ffa500] text-[12px] px-2 py-1 rounded">Có rủi ro</span></td>
-              <td className="text-center border border-gray-300"><div className="flex justify-center gap-3 ">
-                <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
-                <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
-              </div></td>
-            </tr>
-            <tr className="">
-              <td className="p-2 border border-gray-300">Soạn thảo đề cương dự án</td>
-              <td className="text-center border border-gray-300">An Nguyễn</td>
-              <td className="text-center border border-gray-300"><span className="text-white font-medium bg-[#dc3545] text-[12px] px-2 py-1 rounded">Cao</span></td>
-              <td className="text-center border border-gray-300 text-blue-500">24/2/2023</td>
-              <td className="text-center border border-gray-300 text-blue-500">24/2/2024</td>
-              <td className="text-center border border-gray-300"><span className="text-white font-medium bg-[#dc3545] text-[12px] px-2 py-1 rounded">Trễ hạn</span></td>
-              <td className="text-center border border-gray-300"><div className="flex justify-center gap-3 ">
-                <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
-                <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
-              </div></td>
-            </tr>
-            <tr className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer"><CaretDownOutlined /> In Progress</td></tr>
-            <tr className="">
-              <td className="p-2 border border-gray-300">Lên lịch kick off</td>
-              <td className="text-center border border-gray-300">An Nguyễn</td>
-              <td className="text-center border border-gray-300"><span className="text-white font-medium bg-[#dc3545] text-[12px] px-2 py-1 rounded">Cao</span></td>
-              <td className="text-center border border-gray-300 text-blue-500">24/2/2023</td>
-              <td className="text-center border border-gray-300 text-blue-500">24/2/2024</td>
-              <td className="text-center border border-gray-300"><span className="text-white font-medium bg-[#dc3545] text-[12px] px-2 py-1 rounded">Trễ hạn</span></td>
-              <td className="text-center border border-gray-300"><div className="flex justify-center gap-3 ">
-                <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
-                <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
-              </div></td>
-            </tr>
+            <tr onClick={() => setTableOpt({...tableOpt, todo: !tableOpt.todo})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.todo ? <CaretDownOutlined /> : <CaretRightOutlined/>} Todo</td></tr>
+            {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+              <tr key={todo.id} className={tableOpt.todo ? '' : 'hidden'}>
+                <td className="p-2 border border-gray-300">{todo.title}</td>
+                <td className="text-center border border-gray-300">{todo.personChange.username}</td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
+                  todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
+                <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.startDate).toLocaleDateString('vi-VN')}</td>
+                <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.endDate).toLocaleDateString('vi-VN')}</td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
+                  todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
+                <td className="text-center border border-gray-300">
+                  <div className="flex justify-center gap-3 ">
+                    <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
+                    <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+            <tr onClick={() => setTableOpt({...tableOpt, inProgress: !tableOpt.inProgress})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.inProgress ? <CaretDownOutlined /> : <CaretRightOutlined/>} In Progress</td></tr>
+            {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+              <tr key={todo.id} className={tableOpt.inProgress ? '' : 'hidden'}>
+                <td className="p-2 border border-gray-300">{todo.title}</td>
+                <td className="text-center border border-gray-300">{todo.personChange.username}</td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
+                  todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
+                <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.startDate).toLocaleDateString('vi-VN')}</td>
+                <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.endDate).toLocaleDateString('vi-VN')}</td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
+                  todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
+                <td className="text-center border border-gray-300">
+                  <div className="flex justify-center gap-3 ">
+                    <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
+                    <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
             <tr className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer"><CaretRightOutlined /> Pending</td></tr>
+            {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+              <tr key={todo.id} className="">
+                <td className="p-2 border border-gray-300">{todo.title}</td>
+                <td className="text-center border border-gray-300">{todo.personChange.username}</td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
+                  todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
+                <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.startDate).toLocaleDateString('vi-VN')}</td>
+                <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.endDate).toLocaleDateString('vi-VN')}</td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
+                  todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
+                <td className="text-center border border-gray-300">
+                  <div className="flex justify-center gap-3 ">
+                    <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
+                    <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
             <tr className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer"><CaretRightOutlined /> Done</td></tr>
+            {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+              <tr key={todo.id} className="">
+                <td className="p-2 border border-gray-300">{todo.title}</td>
+                <td className="text-center border border-gray-300">{todo.personChange.username}</td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
+                  todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
+                <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.startDate).toLocaleDateString('vi-VN')}</td>
+                <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.endDate).toLocaleDateString('vi-VN')}</td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
+                  todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
+                <td className="text-center border border-gray-300">
+                  <div className="flex justify-center gap-3 ">
+                    <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
+                    <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
           <tbody className="bg-white divide-y divide-gray-200"></tbody>
         </table>
