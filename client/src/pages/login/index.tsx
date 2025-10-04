@@ -13,9 +13,7 @@ export default function Login() {
   const [formError, setFormError] = React.useState({ email: "", password: "" })
 
   React.useEffect(() => {
-    if (currentUser) {
-      navigate("/projects")
-    }
+    if (currentUser) navigate("/projects")
   }, [currentUser, navigate])
 
   const handleSubmit = (event: React.FormEvent) => {

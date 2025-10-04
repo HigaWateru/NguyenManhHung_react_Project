@@ -24,7 +24,7 @@ export default function ProjectDetail() {
 
   return <div className="h-[100vh] w-[100vw] flex flex-col justify-between  ">
     <Header />
-    <main className="p-10 flex flex-col items-center gap-6">
+    <main className="p-10 flex flex-col items-center gap-6 overflow-auto">
       <div className="w-[1200px] text-[16px] flex flex-col gap-6">
         <ProjectIntroduce/>
         <div className="flex justify-between">
@@ -96,9 +96,9 @@ export default function ProjectDetail() {
                 </td>
               </tr>
             ))}
-            <tr className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer"><CaretRightOutlined /> Pending</td></tr>
+            <tr onClick={() => setTableOpt({...tableOpt, pending: !tableOpt.pending})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.pending ? <CaretDownOutlined /> : <CaretRightOutlined/>} Pending</td></tr>
             {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
-              <tr key={todo.id} className="">
+              <tr key={todo.id} className={tableOpt.pending ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
                 <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
@@ -117,9 +117,9 @@ export default function ProjectDetail() {
                 </td>
               </tr>
             ))}
-            <tr className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer"><CaretRightOutlined /> Done</td></tr>
+            <tr onClick={() => setTableOpt({...tableOpt, done: !tableOpt.done})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.done ? <CaretDownOutlined /> : <CaretRightOutlined/>} Done</td></tr>
             {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
-              <tr key={todo.id} className="">
+              <tr key={todo.id} className={tableOpt.done ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
                 <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
