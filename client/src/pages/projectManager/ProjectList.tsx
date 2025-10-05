@@ -31,9 +31,15 @@ export default function ProjectList() {
   const filteredProjects = projectList.filter(project => project.name.toLowerCase().includes(search.toLowerCase()))
   console.log(projectList)
 
+  const [currPage, setCurrPage] = React.useState<number>(1)
+  const startIndex = (currPage - 1) * 10
+  const endIndex = startIndex + 10
+  const paginateProject = filteredProjects.slice(startIndex, endIndex)
+
+
   return <div className="h-[100vh] w-[100vw] flex flex-col justify-between content-between ">
     <Header />
-    <main className="p-10 flex flex-col items-center gap-6">
+    <main className="p-10 flex flex-col items-center gap-6 overflow-auto">
       <div className="border w-[1200px] border-gray-100 rounded-md p-6 flex flex-col gap-6 shadow-lg text-[16px]">
         <h2 className="text-2xl font-semibold">Quản lý dự án nhóm</h2>
         <div className="flex justify-between">
@@ -53,7 +59,7 @@ export default function ProjectList() {
             </tr>
           </thead>
           <tbody>
-            {filteredProjects.map((project: IProject) => (
+            {paginateProject.map((project: IProject) => (
               <tr key={project.id} className="even:bg-gray-100 odd:bg-white">
                 <td className="text-center p-3">{project.id}</td>
                 <td className="p-3 border-l border-r border-gray-300">{project.name}</td>
@@ -73,7 +79,7 @@ export default function ProjectList() {
           </tbody>
         </table>
       </div>
-      <Pagination align="center" defaultCurrent={1} total={50} />
+      <Pagination align="center" defaultCurrent={1} total={50} current={currPage} pageSize={10} onChange={page => setCurrPage(page)}/>
     </main>
     <Footer />
     <Modal title={optModal === 'add' ? 'Thêm dự án' : 'Sửa dự án'} open={openModal} onCancel={() => {
