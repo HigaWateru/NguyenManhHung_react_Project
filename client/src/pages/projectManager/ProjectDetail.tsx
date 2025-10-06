@@ -5,7 +5,7 @@ import ProjectIntroduce from "@/components/ProjectIntroduce";
 import type { AppDispatch, RootState } from "@/redux/store";
 import type { Todo } from "@/utils/types";
 import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
-import { Select } from "antd";
+import { Modal, Select } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -17,6 +17,19 @@ export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>()
 
   const [tableOpt, setTableOpt] = React.useState<{todo: boolean, inProgress: boolean, pending: boolean, done: boolean}>({todo: true, inProgress: true, pending: false, done: false})
+  const [formData, setFormData] = React.useState<{
+    name: string, 
+    personChange: string, 
+    status: 'to-do' | 'in-progress' | 'pending' | 'done' | null, 
+    startDate: string,
+    endDate: string,
+    priority: 'low' | 'medium' | 'high' | null,
+    progress: 'scheduled' | 'in-progress' | 'delayed' | null
+  }>({name: '', personChange: '', status: null, startDate: '', endDate: '', priority: null, progress: null})
+  const [openModal, setOpenModal] = React.useState<boolean>(false)
+  const [optModal, setOptModal] = React.useState<'add' | 'edit'>('add')
+  const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false)
+  const [ID, setID] = React.useState<string>('')
 
   React.useEffect(() => {
     dispatch(fetchTodo(Number(id)))
@@ -28,7 +41,10 @@ export default function ProjectDetail() {
       <div className="w-[1200px] text-[16px] flex flex-col gap-6">
         <ProjectIntroduce/>
         <div className="flex justify-between">
-          <button className="bg-[#007bff] text-white px-3 py-1 rounded-md cursor-pointer">+ Thêm nhiệm vụ</button>
+          <button onClick={() => {
+            setOptModal('add')
+            setOpenModal(true)
+          }} className="bg-[#007bff] text-white px-3 py-1 rounded-md cursor-pointer">+ Thêm nhiệm vụ</button>
           <div className="flex gap-4">
             <Select style={{ width: 200, height: 40 }} placeholder="Sắp xếp theo" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
               { value: 'todo', label: 'To do' }, 
@@ -69,8 +85,14 @@ export default function ProjectDetail() {
                 }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
                 <td className="text-center border border-gray-300">
                   <div className="flex justify-center gap-3 ">
-                    <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
-                    <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
+                    <button onClick={() => {
+                      setOptModal('edit')
+                      setOpenModal(true)
+                    }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
+                    <button onClick={() => {
+                      setConfirmDelete(true)
+                      setID(todo.id)
+                    }} className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
                   </div>
                 </td>
               </tr>
@@ -90,8 +112,14 @@ export default function ProjectDetail() {
                 }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
                 <td className="text-center border border-gray-300">
                   <div className="flex justify-center gap-3 ">
-                    <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
-                    <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
+                    <button onClick={() => {
+                      setOptModal('edit')
+                      setOpenModal(true)
+                    }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
+                    <button onClick={() => {
+                      setConfirmDelete(true)
+                      setID(todo.id)
+                    }} className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
                   </div>
                 </td>
               </tr>
@@ -111,8 +139,14 @@ export default function ProjectDetail() {
                 }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
                 <td className="text-center border border-gray-300">
                   <div className="flex justify-center gap-3 ">
-                    <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
-                    <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
+                    <button onClick={() => {
+                      setOptModal('edit')
+                      setOpenModal(true)
+                    }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
+                    <button onClick={() => {
+                      setConfirmDelete(true)
+                      setID(todo.id)
+                    }} className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
                   </div>
                 </td>
               </tr>
@@ -132,8 +166,14 @@ export default function ProjectDetail() {
                 }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
                 <td className="text-center border border-gray-300">
                   <div className="flex justify-center gap-3 ">
-                    <button className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
-                    <button className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
+                    <button onClick={() => {
+                      setOptModal('edit')
+                      setOpenModal(true)
+                    }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
+                    <button onClick={() => {
+                      setConfirmDelete(true)
+                      setID(todo.id)
+                    }} className="px-3 py-1 bg-[#dc3545] text-[14px] text-white rounded-md cursor-pointer">Xóa</button>
                   </div>
                 </td>
               </tr>
@@ -144,5 +184,66 @@ export default function ProjectDetail() {
       </div>
     </main>
     <Footer />
+    <Modal open={openModal} maskClosable={false} okText='Lưu' title={optModal === 'add' ? 'Thêm nhiệm vụ' : 'Sửa nhiệm vụ'} onCancel={() => {
+      setOpenModal(false)
+    }} onOk={() => {}}>
+      <div className="flex flex-col gap-2">
+        <label className="font-medium">Tên nhiệm vụ</label>
+        <input type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
+        <p className="text-red-500 text-sm"></p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="font-medium">Người phụ trách</label>
+        <Select style={{ width: 470, height: 50 }} placeholder="Chọn người phụ trách" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+          { value: 'm1', label: 'Nguyen A' }, 
+          { value: 'm2', label: 'Nguyen B' }, 
+          { value: 'm3', label: 'Nguyen C' }
+        ]} />
+        <p className="text-red-500 text-sm"></p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="font-medium">Trạng thái</label>
+        <Select style={{ width: 470, height: 50 }} placeholder="Chọn trạng thái nhiệm vụ" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+          { value: 'to-do', label: 'To do' }, 
+          { value: 'in-progress', label: 'In progress' }, 
+          { value: 'pending', label: 'Pending'},
+          { value: 'done', label: 'Done' }
+        ]} />
+        <p className="text-red-500 text-sm"></p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="font-medium">Ngày bắt đầu</label>
+        <input type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
+        <p className="text-red-500 text-sm"></p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="font-medium">Ngày kết thúc</label>
+        <input type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
+        <p className="text-red-500 text-sm"></p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="font-medium">Độ ưu tiên</label>
+        <Select style={{ width: 470, height: 50 }} placeholder="Chọn độ ưu tiên" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+          { value: 'low', label: 'Thấp' }, 
+          { value: 'medium', label: 'Trung bình' }, 
+          { value: 'high', label: 'Cao' }
+        ]} />
+        <p className="text-red-500 text-sm"></p>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="font-medium">Tiến độ</label>
+        <Select style={{ width: 470, height: 50 }} placeholder="Chọn tiến độ" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+          { value: 'scheduled', label: 'Đúng tiến độ' }, 
+          { value: 'in-progress', label: 'Có rủi ro' }, 
+          { value: 'delayed', label: 'Trễ hạn' }
+        ]} />
+        <p className="text-red-500 text-sm"></p>
+      </div>
+    </Modal>
+    <Modal title='Xác nhận xoá' open={confirmDelete} onCancel={() => {
+      setConfirmDelete(false)
+    }} onOk={() => { }} okText='Xoá' okType="danger">
+      <p>Bạn có chắc chắn xoá nhiệm vụ này</p>
+    </Modal>
   </div>;
 }

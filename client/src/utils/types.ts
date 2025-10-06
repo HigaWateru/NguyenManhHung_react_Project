@@ -1,6 +1,7 @@
 export interface IMember {
     id: string
     username: string
+    email: string
     role: string
 }
 

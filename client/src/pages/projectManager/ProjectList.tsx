@@ -1,7 +1,6 @@
 import { fetchProject } from "@/apis/auth.api";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { logout } from "@/redux/slices/account.slice";
 import type { AppDispatch, RootState } from "@/redux/store";
 import type { IProject } from "@/utils/types";
 import { Modal, Pagination } from "antd";
@@ -10,32 +9,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function ProjectList() {
-  const projectList = useSelector((state: RootState) => state.projectList.list)
+  const {list: projectList, total} = useSelector((state: RootState) => state.projectList)
   const dispatch = useDispatch<AppDispatch>()
   const [search, setSearch] = React.useState('')
   const navigate = useNavigate()
 
   const [openModal, setOpenModal] = React.useState<boolean>(false)
+  const [validateForm, setValidateForm] = React.useState<{name: string, image: string, description: string}>({name: '', image: '', description: ''})
   const [optModal, setOptModal] = React.useState<'add' | 'edit'>('add')
+  const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false)
   const [ID, setID] = React.useState<number | null>(null)
-  const {currentUser} = useSelector((state: RootState) => state.account)
+  const [currPage, setCurrPage] = React.useState<number>(1)
+
+
+  const [formData, setFormData] = React.useState<{name: string, image: string, description: string}>({name: '', image: '', description: ''})
 
   React.useEffect(() => {
-    if(!currentUser) {
-      navigate('/login')
-      dispatch(logout())
-    }
-    dispatch(fetchProject())
-  }, [dispatch, currentUser, navigate])
-
-  const filteredProjects = projectList.filter(project => project.name.toLowerCase().includes(search.toLowerCase()))
-  console.log(projectList)
-
-  const [currPage, setCurrPage] = React.useState<number>(1)
-  const startIndex = (currPage - 1) * 10
-  const endIndex = startIndex + 10
-  const paginateProject = filteredProjects.slice(startIndex, endIndex)
-
+    const timeout = setTimeout(() => {
+      dispatch(fetchProject({ page: 1, limit: 9, search }))
+      setCurrPage(1)
+    }, 400)
+    return () => clearTimeout(timeout)
+  }, [search, dispatch])
 
   return <div className="h-[100vh] w-[100vw] flex flex-col justify-between content-between ">
     <Header />
@@ -47,7 +42,7 @@ export default function ProjectList() {
             setOptModal('add')
             setOpenModal(true)
           }} className="bg-[#007bff] text-white px-3 py-1 rounded-md cursor-pointer">+ Thêm dự án</button>
-          <input value={search} onChange={e => setSearch(e.target.value)} className="border border-gray-300 rounded-md px-3 py-1 outline-none w-[300px]" type="text" placeholder="Tìm kiếm dự án"/>
+          <input value={search} onChange={e => setSearch(e.target.value)} className="border border-gray-300 rounded-md px-3 py-1 outline-none w-[300px]" type="text" placeholder="Tìm kiếm dự án" />
         </div>
         <h2 className="text-xl font-semibold">Danh sách dự án</h2>
         <table className="w-full table-auto border border-gray-300 text-left border-collapse ">
@@ -59,7 +54,7 @@ export default function ProjectList() {
             </tr>
           </thead>
           <tbody>
-            {paginateProject.map((project: IProject) => (
+            {projectList.map((project: IProject) => (
               <tr key={project.id} className="even:bg-gray-100 odd:bg-white">
                 <td className="text-center p-3">{project.id}</td>
                 <td className="p-3 border-l border-r border-gray-300">{project.name}</td>
@@ -70,7 +65,10 @@ export default function ProjectList() {
                       setID(project.id)
                       setOpenModal(true)
                     }} className="p-4 py-1 bg-[#ffc107] rounded-md cursor-pointer">Sửa</button>
-                    <button className="px-3 py-1 bg-[#dc3545] text-white rounded-md cursor-pointer">Xóa</button>
+                    <button onClick={() => {
+                      setID(project.id)
+                      setConfirmDelete(true)
+                    }} className="px-3 py-1 bg-[#dc3545] text-white rounded-md cursor-pointer">Xóa</button>
                     <button onClick={() => navigate(`/projects/${project.id}`)} className="px-3 py-1 bg-[#007bff] text-white rounded-md cursor-pointer">Chi tiết</button>
                   </div>
                 </td>
@@ -79,28 +77,35 @@ export default function ProjectList() {
           </tbody>
         </table>
       </div>
-      <Pagination align="center" defaultCurrent={1} total={50} current={currPage} pageSize={10} onChange={page => setCurrPage(page)}/>
+      <Pagination align="center" defaultCurrent={1} total={total} current={currPage} pageSize={9} onChange={page => setCurrPage(page)} />
     </main>
     <Footer />
     <Modal title={optModal === 'add' ? 'Thêm dự án' : 'Sửa dự án'} open={openModal} onCancel={() => {
       setOpenModal(false)
       setID(null)
+    }} onOk={() => {
+
     }}>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Tên dự án</label>
-        <input type="text" className="border border-gray-300 rounded-md p-3 outline-none"/>
+        <input value={formData.name} onChange={event => setFormData({...formData, name: event.target.value})} type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
         <p className="text-red-500 text-sm"></p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Hình ảnh dự án (Tạm thời để bằng đường link)</label>
-        <input type="text" className="border border-gray-300 rounded-md p-3 outline-none"/>
+        <input value={formData.image} onChange={event => setFormData({...formData, image: event.target.value})} type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
         <p className="text-red-500 text-sm"></p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Mô tả dự án</label>
-        <textarea name="description" id="description" className="w-full h-[100px] border border-gray-300 rounded-md p-3 outline-none"></textarea>
+        <textarea value={formData.description} onChange={event => setFormData({...formData, description: event.target.value})} name="description" id="description" className="w-full h-[100px] border border-gray-300 rounded-md p-3 outline-none"></textarea>
         <p className="text-red-500 text-sm"></p>
-      </div>      
+      </div>
+    </Modal>
+    <Modal title='Xác nhận xoá' open={confirmDelete} onCancel={() => {
+      setConfirmDelete(false)
+    }} onOk={() => { }} okText='Xoá' okType="danger">
+      <p>Bạn có chắc chắn xoá dự án này</p>
     </Modal>
   </div>;
 }

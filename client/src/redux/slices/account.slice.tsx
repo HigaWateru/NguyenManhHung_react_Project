@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface State {
     currentUser: IUser | null
-    error: string | null
+    error: {email: string, password: string} | null
 }
 
 const initialState: State = {
@@ -30,7 +30,7 @@ const accountSlice = createSlice({
                 state.currentUser = action.payload
             })
             .addCase(login.rejected, (state, action) => {
-                state.error = action.payload || "Login failed"
+                state.error = action.payload || {email: '', password: ''}
             })
 
             .addCase(register.pending, (state) => {
@@ -40,7 +40,7 @@ const accountSlice = createSlice({
                 state.currentUser = action.payload
             })
             .addCase(register.rejected, (state, action) => {
-                state.error = action.payload || "Register failed"
+                state.error = action.payload || {email: '', password: ''}
             })
 
     }

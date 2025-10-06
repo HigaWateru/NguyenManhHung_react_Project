@@ -1,40 +1,37 @@
-import { fetchProject } from "@/apis/auth.api"
-import type { IProject, } from "@/utils/types"
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchProject } from "@/apis/auth.api";
+import type { IProject } from "@/utils/types";
 
-interface State {
+interface ProjectState {
     list: IProject[]
+    total: number
     loading: boolean
-    search: string
-}
-const initialState: State = {
-    list: [],
-    loading: false,
-    search: ''
 }
 
-const projectListSlice = createSlice({
-    name: 'projectList',
+const initialState: ProjectState = {
+    list: [],
+    total: 0,
+    loading: false,
+}
+
+const projectSlice = createSlice({
+    name: "projectList",
     initialState,
-    reducers: { 
-        setSearch: (state, action: PayloadAction<string>) => {
-            state.search = action.payload
-        }
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchProject.pending, (state) => {
-                state.loading = true
-            })
-            .addCase(fetchProject.fulfilled, (state, action: PayloadAction<IProject[]>) => {
-                state.list = action.payload
-                state.loading = false
-            })
-            .addCase(fetchProject.rejected, (state) => {
-                state.loading = false
-            })
-    }
+        .addCase(fetchProject.pending, (state) => {
+            state.loading = true
+        })
+        .addCase(fetchProject.fulfilled, (state, action) => {
+            state.list = action.payload.data
+            state.total = action.payload.total
+            state.loading = false
+        })
+        .addCase(fetchProject.rejected, (state) => {
+            state.loading = false
+        })
+    },
 })
 
-export const { setSearch } = projectListSlice.actions
-export default projectListSlice.reducer
+export default projectSlice.reducer

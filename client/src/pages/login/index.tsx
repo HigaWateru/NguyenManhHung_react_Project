@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { type AppDispatch, type RootState } from "../../redux/store"; 
+import { type AppDispatch, type RootState } from "../../redux/store";
 import { login } from "@/apis/auth.api";
 
 export default function Login() {
@@ -11,16 +11,35 @@ export default function Login() {
 
   const [loginData, setLoginData] = React.useState({ email: "", password: "" })
   const [formError, setFormError] = React.useState({ email: "", password: "" })
+  const [isSubmit, setIsSubmit] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     if (currentUser) navigate("/projects")
   }, [currentUser, navigate])
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!loginData.email) return setFormError({ ...formError, email: "Email không được để trống" })
-    if (!loginData.password) return setFormError({ ...formError, password: "Mật khẩu không được để trống" })
-    dispatch(login(loginData))
+  const validate = (): boolean => {
+    const errors = { email: "", password: "" }
+
+    if (!loginData.email.trim()) errors.email = "Email không được để trống"
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginData.email)) errors.email = "Email không đúng định dạng"
+
+    if (!loginData.password.trim()) errors.password = "Mật khẩu không được để trống"
+    setFormError(errors)
+    return !errors.email && !errors.password
+  }
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+    if (!validate()) return
+    try {
+      await dispatch(login(loginData)).unwrap();
+      setIsSubmit(true);
+      setFormError({ email: "", password: "" })
+      setTimeout(() => navigate("/projects"), 1200)
+    } catch (rejected) {
+      setIsSubmit(false)
+      if (rejected && typeof rejected === "object") setFormError(prev => ({ ...prev, ...(rejected) }))
+    }
   }
 
   return (
@@ -30,18 +49,25 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-4 p-5 shadow-lg border border-gray-100 rounded-md">
           <div className="flex flex-col gap-2">
             <label className="font-medium">Email</label>
-            <input type="email" value={loginData.email} onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} className="border border-gray-300 rounded-md p-3 outline-none"/>
-            <p className="text-red-500 text-sm">{formError.email || error}</p>
+            <input type="email" value={loginData.email} onChange={(e) => {
+                setLoginData({ ...loginData, email: e.target.value })
+                setFormError(prev => ({ ...prev, email: "" }))
+              }} className="border border-gray-300 rounded-md p-3 outline-none"/>
+            <p className="text-red-500 text-sm">{formError.email || error?.email}</p>
           </div>
           <div className="flex flex-col gap-2">
             <label className="font-medium">Mật khẩu</label>
-            <input type="password" value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} className="border border-gray-300 rounded-md p-3 outline-none"/>
-            <p className="text-red-500 text-sm">{formError.password}</p>
+            <input type="password" value={loginData.password} onChange={(e) => {
+                setLoginData({ ...loginData, password: e.target.value })
+                setFormError(prev => ({ ...prev, password: "" }))
+              }} className="border border-gray-300 rounded-md p-3 outline-none"/>
+            <p className="text-red-500 text-sm">{formError.password || error?.password}</p>
           </div>
-          <button type="submit" className="p-3 bg-blue-600 text-white rounded-md">Đăng nhập</button>
+          <p className="text-green-500 text-sm">{isSubmit && "✓ Đăng nhập thành công!"}</p>
+          <button type="submit" className="p-3 bg-blue-600 text-white rounded-md cursor-pointer">Đăng nhập</button>
           <p className="text-center">Chưa có tài khoản? <NavLink to="/register">Đăng ký</NavLink></p>
         </form>
       </div>
     </div>
-  )
+  );
 }

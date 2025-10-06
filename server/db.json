@@ -1,1151 +1,192 @@
 {
   "users": [
     {
-      "id": "u1",
-      "username": "Nguyen Van A",
+      "id": "u001",
+      "username": "nguyenvana",
       "email": "a@example.com",
       "password": "123456",
       "projects": [
         {
           "id": 1,
-          "name": "Website bán hàng",
-          "image": "shop.png",
-          "description": "Xây dựng website thương mại điện tử",
+          "name": "Website thương mại điện tử",
+          "image": "https://picsum.photos/seed/ecommerce/400/250",
+          "description": "Phát triển website bán hàng điện tử với React và Node.js",
           "members": [
             {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
+              "id": "m01",
+              "username": "Trần Minh",
+              "email": "tranminh@example.com",
+              "role": "Frontend Developer"
             },
             {
-              "id": "m2",
-              "username": "Tran Thi B",
-              "role": "Developer"
+              "id": "m02",
+              "username": "Nguyễn Hoa",
+              "email": "nguyenhoa@example.com",
+              "role": "Backend Developer"
+            },
+            {
+              "id": "m03",
+              "username": "Phạm Tuấn",
+              "email": "phamtuan@example.com",
+              "role": "Tester"
             }
           ],
           "todos": [
             {
-              "id": "t1",
-              "title": "Thiết kế giao diện",
+              "id": "t01",
+              "title": "Thiết kế giao diện trang chủ",
               "priority": "high",
               "personChange": {
-                "id": "m2",
-                "username": "Tran Thi B",
-                "role": "Developer"
+                "id": "m01",
+                "username": "Trần Minh",
+                "email": "tranminh@example.com",
+                "role": "Frontend Developer"
               },
-              "startDate": "2025-10-01",
-              "endDate": "2025-10-10",
+              "startDate": "2025-09-10",
+              "endDate": "2025-09-15",
               "progress": "in-progress",
               "status": "in-progress"
             },
             {
-              "id": "t2",
-              "title": "Tích hợp thanh toán",
+              "id": "t02",
+              "title": "Tạo API sản phẩm",
               "priority": "medium",
               "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
+                "id": "m02",
+                "username": "Nguyễn Hoa",
+                "email": "nguyenhoa@example.com",
+                "role": "Backend Developer"
               },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-15",
+              "startDate": "2025-09-12",
+              "endDate": "2025-09-18",
+              "progress": "scheduled",
+              "status": "pending"
+            },
+            {
+              "id": "t03",
+              "title": "Kiểm thử giỏ hàng",
+              "priority": "low",
+              "personChange": {
+                "id": "m03",
+                "username": "Phạm Tuấn",
+                "email": "phamtuan@example.com",
+                "role": "Tester"
+              },
+              "startDate": "2025-09-18",
+              "endDate": "2025-09-22",
               "progress": "scheduled",
               "status": "to-do"
             },
             {
-              "id": "t3",
-              "title": "Tạo database sản phẩm",
+              "id": "t04",
+              "title": "Tối ưu SEO cho trang sản phẩm",
+              "priority": "medium",
+              "personChange": {
+                "id": "m01",
+                "username": "Trần Minh",
+                "email": "tranminh@example.com",
+                "role": "Frontend Developer"
+              },
+              "startDate": "2025-09-20",
+              "endDate": "2025-09-25",
+              "progress": "in-progress",
+              "status": "in-progress"
+            },
+            {
+              "id": "t05",
+              "title": "Triển khai website lên hosting",
               "priority": "high",
               "personChange": {
-                "id": "m2",
-                "username": "Tran Thi B",
-                "role": "Developer"
+                "id": "m02",
+                "username": "Nguyễn Hoa",
+                "email": "nguyenhoa@example.com",
+                "role": "Backend Developer"
               },
-              "startDate": "2025-10-07",
-              "endDate": "2025-10-18",
-              "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t4",
-              "title": "Đăng nhập bằng Google",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-20",
+              "startDate": "2025-09-26",
+              "endDate": "2025-09-30",
               "progress": "scheduled",
               "status": "pending"
-            },
-            {
-              "id": "t5",
-              "title": "Viết tài liệu hướng dẫn",
-              "priority": "low",
-              "personChange": {
-                "id": "m2",
-                "username": "Tran Thi B",
-                "role": "Developer"
-              },
-              "startDate": "2025-10-09",
-              "endDate": "2025-10-11",
-              "progress": "delayed",
-              "status": "pending"
-            },
-            {
-              "id": "t6",
-              "title": "Triển khai hosting",
-              "priority": "medium",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "scheduled",
-              "status": "to-do"
             }
           ]
         },
         {
           "id": 2,
-          "name": "Ứng dụng chat",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng chat realtime",
+          "name": "Ứng dụng quản lý học sinh",
+          "image": "https://picsum.photos/seed/school/400/250",
+          "description": "Xây dựng hệ thống quản lý học sinh cho trường học",
           "members": [
             {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
+              "id": "m04",
+              "username": "Lê Phương",
+              "email": "lephuong@example.com",
+              "role": "Project Manager"
             },
             {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
+              "id": "m05",
+              "username": "Đỗ Huy",
+              "email": "dohuy@example.com",
+              "role": "Database Engineer"
             }
           ],
           "todos": [
-            {
-              "id": "t7",
-              "title": "Cài đặt socket server",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "scheduled",
-              "status": "to-do"
-            },
-            {
-              "id": "t8",
-              "title": "Xây dựng UI chat",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "in-progress"
-            },
-            {
-              "id": "t9",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "scheduled",
-              "status": "to-do"
-            },
-            {
-              "id": "t10",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "scheduled",
-              "status": "pending"
-            },
             {
               "id": "t11",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
-              "status": "to-do"
-            },
-            {
-              "id": "t12",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "pending"
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
-            },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
-            {
-              "id": "t13",
-              "title": "Cài đặt socket server",
+              "title": "Thiết kế cơ sở dữ liệu học sinh",
               "priority": "high",
               "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
+                "id": "m05",
+                "username": "Đỗ Huy",
+                "email": "dohuy@example.com",
+                "role": "Database Engineer"
               },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "14",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "pending"
-            },
-            {
-              "id": "t15",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t16",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t17",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t82",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "to-do"
-            }
-          ]
-        },
-        {
-          "id": 4,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
-            },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
-            {
-              "id": "t19",
-              "title": "Cài đặt socket server",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "20",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "pending"
-            },
-            {
-              "id": "t21",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t22",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t23",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t24",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "to-do"
-            }
-          ]
-        },
-        {
-          "id": 5,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
-            },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
-            {
-              "id": "t25",
-              "title": "Cài đặt socket server",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "26",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "pending"
-            },
-            {
-              "id": "t27",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t28",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t29",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t30",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "to-do"
-            }
-          ]
-        },
-        {
-          "id": 6,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
-            },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
-            {
-              "id": "t13",
-              "title": "Cài đặt socket server",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "14",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "pending"
-            },
-            {
-              "id": "t15",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t16",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t17",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
+              "startDate": "2025-09-01",
+              "endDate": "2025-09-03",
+              "progress": "done",
               "status": "done"
             },
             {
               "id": "t12",
-              "title": "Test hiệu năng",
-              "priority": "low",
+              "title": "Phát triển giao diện nhập điểm",
+              "priority": "medium",
               "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
+                "id": "m04",
+                "username": "Lê Phương",
+                "email": "lephuong@example.com",
+                "role": "Project Manager"
               },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "to-do"
-            }
-          ]
-        },
-        {
-          "id": 7,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
+              "startDate": "2025-09-04",
+              "endDate": "2025-09-10",
+              "progress": "in-progress",
+              "status": "in-progress"
             },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
             {
               "id": "t13",
-              "title": "Cài đặt socket server",
+              "title": "Kết nối backend và frontend",
               "priority": "high",
               "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
+                "id": "m05",
+                "username": "Đỗ Huy",
+                "email": "dohuy@example.com",
+                "role": "Database Engineer"
               },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "14",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
+              "startDate": "2025-09-11",
+              "endDate": "2025-09-15",
+              "progress": "scheduled",
               "status": "pending"
             },
             {
-              "id": "t15",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t16",
-              "title": "Thông báo realtime",
+              "id": "t14",
+              "title": "Tạo báo cáo học sinh",
               "priority": "medium",
               "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
+                "id": "m04",
+                "username": "Lê Phương",
+                "email": "lephuong@example.com",
+                "role": "Project Manager"
               },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t17",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
+              "startDate": "2025-09-16",
+              "endDate": "2025-09-22",
               "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t12",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "to-do"
-            }
-          ]
-        },
-        {
-          "id": 8,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
-            },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
-            {
-              "id": "t13",
-              "title": "Cài đặt socket server",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "14",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "pending"
-            },
-            {
-              "id": "t15",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t16",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t17",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t12",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "to-do"
-            }
-          ]
-        },
-        {
-          "id": 9,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
-            },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
-            {
-              "id": "t13",
-              "title": "Cài đặt socket server",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "14",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "pending"
-            },
-            {
-              "id": "t15",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t16",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t17",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t12",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "to-do"
-            }
-          ]
-        },
-        {
-          "id": 10,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
-            },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
-            {
-              "id": "t13",
-              "title": "Cài đặt socket server",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "14",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "pending"
-            },
-            {
-              "id": "t15",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t16",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t17",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t12",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
-              "status": "to-do"
-            }
-          ]
-        },
-        {
-          "id": 11,
-          "name": "Ứng dụng học ReactJS",
-          "image": "chat.png",
-          "description": "Phát triển ứng dụng ReactJS",
-          "members": [
-            {
-              "id": "m1",
-              "username": "Nguyen Van A",
-              "role": "Leader"
-            },
-            {
-              "id": "m3",
-              "username": "Le Van C",
-              "role": "Tester"
-            }
-          ],
-          "todos": [
-            {
-              "id": "t13",
-              "title": "Cài đặt socket server",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-02",
-              "endDate": "2025-10-12",
-              "progress": "in-progress",
-              "status": "done"
-            },
-            {
-              "id": "14",
-              "title": "Xây dựng UI chat",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-05",
-              "endDate": "2025-10-14",
-              "progress": "in-progress",
-              "status": "pending"
-            },
-            {
-              "id": "t15",
-              "title": "Tích hợp gửi ảnh",
-              "priority": "high",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-06",
-              "endDate": "2025-10-16",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t16",
-              "title": "Thông báo realtime",
-              "priority": "medium",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-08",
-              "endDate": "2025-10-18",
-              "progress": "delayed",
-              "status": "in-progress"
-            },
-            {
-              "id": "t17",
-              "title": "Xác thực tài khoản",
-              "priority": "low",
-              "personChange": {
-                "id": "m1",
-                "username": "Nguyen Van A",
-                "role": "Leader"
-              },
-              "startDate": "2025-10-10",
-              "endDate": "2025-10-20",
-              "progress": "scheduled",
-              "status": "done"
-            },
-            {
-              "id": "t12",
-              "title": "Test hiệu năng",
-              "priority": "low",
-              "personChange": {
-                "id": "m3",
-                "username": "Le Van C",
-                "role": "Tester"
-              },
-              "startDate": "2025-10-12",
-              "endDate": "2025-10-22",
-              "progress": "delayed",
               "status": "to-do"
             }
           ]
@@ -1155,9 +196,16 @@
     {
       "name": "Higa_Wateru",
       "email": "fc.canhcut1@gmail.com",
-      "password": "123456",
+      "password": "12345678",
       "projects": [],
-      "id": "mwtjXMr"
+      "id": "uCzpqEC"
+    },
+    {
+      "name": "admin",
+      "email": "admin@admin.com",
+      "password": "12345678",
+      "projects": [],
+      "id": "2-sPOfo"
     }
   ]
 }
