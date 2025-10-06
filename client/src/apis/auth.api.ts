@@ -65,15 +65,16 @@ export const fetchProject = createAsyncThunk<{data: IProject[], total: number}, 
     return {data: paginatedProject, total: filtered.length}
 })
 
-export const addProject = createAsyncThunk<IProject, { name: string; image: string; description: string }, { rejectValue: string }>("project/add", async(payload, { rejectWithValue }) => {
+export const addProject = createAsyncThunk<IProject, { name: string; image: string; description: string }, { rejectValue: {name: string, description: string} }>("project/add", async(payload, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem("currentUser")
-        if (!userID) return rejectWithValue("Không tìm thấy người dùng hiện tại")
+        if (!userID) return rejectWithValue({name: 'Không tìm thấy người dùng hiện tại', description: ''})
         const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
         const exitst = userData.projects.some(project => project.name.toLowerCase().trim() === payload.name.toLowerCase())
-        if(exitst) rejectWithValue('Tên dự án đã tồn tại')
+        if(exitst) return rejectWithValue({name: 'Tên dự án đã tồn tại', description: ''})
+        if(payload.description.trim().length < 20) return rejectWithValue({name: '', description: 'Mô tả phải tối thiểu 20 kí tự'})
         const newProject: IProject = {
-            id: Date.now(),
+            id: userData.projects.length > 0 ? Math.max(...userData.projects.map(project => Number(project.id))) + 1 : 1,
             name: payload.name,
             image: payload.image,
             description: payload.description,
@@ -84,10 +85,22 @@ export const addProject = createAsyncThunk<IProject, { name: string; image: stri
         await axios.put(`http://localhost:3000/users/${userID}`, updatedUser)
         return newProject
     } catch {
-        return rejectWithValue("Lỗi khi thêm dự án")
+        return rejectWithValue({name: 'Lỗi khi thêm dự án', description: ''})
     }
 })
 
+export const deleteProject = createAsyncThunk("project/delete",async (id: number, { rejectWithValue }) => {
+    try {
+        const userID = localStorage.getItem("currentUser")
+        if (!userID) return rejectWithValue("Không tìm thấy người dùng hiện tại")
+        const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+        const updatedProjects = userData.projects.filter((project) => project.id !== id)
+        await axios.put(`http://localhost:3000/users/${userID}`, {...userData, projects: updatedProjects})
+        return id
+    } catch {
+        return rejectWithValue("Lỗi khi xoá dự án")
+    }
+})
 export const fetchTodo = createAsyncThunk<IProject, number>('auth/fetchTodo', async (projectId) => {
     const userID = localStorage.getItem('currentUser')
     if (!userID) throw new Error('No current user')

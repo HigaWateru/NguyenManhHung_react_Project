@@ -190,6 +190,14 @@
               "status": "to-do"
             }
           ]
+        },
+        {
+          "id": 3,
+          "name": "Ứng dụng quản lý máy tính",
+          "image": "https://cdn-media.sforum.vn/storage/app/media/HuynhUy/React%20l%C3%A0%20g%C3%ACH%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20chi%20ti%E1%BA%BFt%20cho%20ng%C6%B0%E1%BB%9Di%20m%E1%BB%9Bi%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u/react-la-gi-thumb.jpg",
+          "description": "Ứng dụng quản lý máy tính (tạm thời là vậy)",
+          "todos": [],
+          "members": []
         }
       ]
     },

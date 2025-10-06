@@ -1,4 +1,4 @@
-import { fetchProject } from "@/apis/auth.api";
+import { addProject, deleteProject, fetchProject } from "@/apis/auth.api";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import type { AppDispatch, RootState } from "@/redux/store";
@@ -15,14 +15,21 @@ export default function ProjectList() {
   const navigate = useNavigate()
 
   const [openModal, setOpenModal] = React.useState<boolean>(false)
-  const [validateForm, setValidateForm] = React.useState<{name: string, image: string, description: string}>({name: '', image: '', description: ''})
+  const [errorMol, setErrorMol] = React.useState<{name: string, image: string, description: string}>({name: '', image: '', description: ''})
   const [optModal, setOptModal] = React.useState<'add' | 'edit'>('add')
   const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false)
   const [ID, setID] = React.useState<number | null>(null)
   const [currPage, setCurrPage] = React.useState<number>(1)
 
-
   const [formData, setFormData] = React.useState<{name: string, image: string, description: string}>({name: '', image: '', description: ''})
+
+  const validate = (): boolean => {
+    const errors = {name: '', image: '', description: ''}
+    if(!formData.name.trim()) errors.name = 'Tên dự án không được để trống'
+    if(formData.description.trim().length < 20) errors.description = 'Mô tả phải có ít nhất 20 kí tự'
+    setErrorMol(errors)
+    return !errors.name && !errors.description
+  }
 
   React.useEffect(() => {
     const timeout = setTimeout(() => {
@@ -80,16 +87,30 @@ export default function ProjectList() {
       <Pagination align="center" defaultCurrent={1} total={total} current={currPage} pageSize={9} onChange={page => setCurrPage(page)} />
     </main>
     <Footer />
-    <Modal title={optModal === 'add' ? 'Thêm dự án' : 'Sửa dự án'} open={openModal} onCancel={() => {
+    <Modal okText='Lưu' title={optModal === 'add' ? 'Thêm dự án' : 'Sửa dự án'} open={openModal} onCancel={() => {
       setOpenModal(false)
       setID(null)
-    }} onOk={() => {
-
+    }} onOk={async() => {
+      if(!validate()) return
+      try {
+        const response = await dispatch(addProject(formData))
+        if(addProject.fulfilled.match(response)) {
+          setOpenModal(false)
+          setFormData({name: '', image: '', description: ''})
+          setErrorMol({name: '', image: '', description: ''})
+          dispatch(fetchProject({page: currPage, limit: 9, search}))
+        } else if(addProject.rejected.match(response)) {
+          const payload = response.payload as {name?: string, description?: string}
+          setErrorMol({name: payload.name || '', image: '', description: payload.description || ''})
+        }
+      } catch (error) {
+        console.log("Lỗi thêm dự án", error)
+      }
     }}>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Tên dự án</label>
         <input value={formData.name} onChange={event => setFormData({...formData, name: event.target.value})} type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
-        <p className="text-red-500 text-sm"></p>
+        <p className="text-red-500 text-sm">{errorMol.name}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Hình ảnh dự án (Tạm thời để bằng đường link)</label>
@@ -99,13 +120,26 @@ export default function ProjectList() {
       <div className="flex flex-col gap-2">
         <label className="font-medium">Mô tả dự án</label>
         <textarea value={formData.description} onChange={event => setFormData({...formData, description: event.target.value})} name="description" id="description" className="w-full h-[100px] border border-gray-300 rounded-md p-3 outline-none"></textarea>
-        <p className="text-red-500 text-sm"></p>
+        <p className="text-red-500 text-sm">{errorMol.description}</p>
       </div>
     </Modal>
-    <Modal title='Xác nhận xoá' open={confirmDelete} onCancel={() => {
-      setConfirmDelete(false)
-    }} onOk={() => { }} okText='Xoá' okType="danger">
-      <p>Bạn có chắc chắn xoá dự án này</p>
-    </Modal>
+    <Modal title="Xác nhận xoá" open={confirmDelete} onCancel={() => {
+        setConfirmDelete(false)
+        setID(null)
+      }} onOk={async () => {
+        if (ID === null) return
+        try {
+          const response = await dispatch(deleteProject(ID))
+          if (deleteProject.fulfilled.match(response)) await dispatch(fetchProject({ page: currPage, limit: 9, search }))
+          else console.error("Xóa thất bại:", response)
+        } catch (error) {
+          console.error("Lỗi xoá:", error)
+        } finally {
+          setConfirmDelete(false)
+          setID(null)
+        }
+    }} okText="Xoá" okType="danger">
+      <p>Bạn có chắc chắn muốn xoá dự án này không?</p>
+    </Modal>  
   </div>;
 }
