@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addProject, deleteProject, fetchProject } from "@/apis/auth.api";
+import { addProject, deleteProject, fetchProject, updateProject } from "@/apis/auth.api";
 import type { IProject } from "@/utils/types";
 
 interface ProjectState {
@@ -48,8 +48,14 @@ const projectSlice = createSlice({
             state.list = state.list.filter(project => project.id !== action.payload)
             state.total -= 1
         })
-        .addCase(deleteProject.rejected, (state, action) => {
-            console.error("Xóa thất bại:", action.payload)
+
+        .addCase(updateProject.fulfilled, (state, action) => {
+            const index = state.list.findIndex(project => project.id === action.payload.id)
+            if(index !== -1) state.list[index] = {...state.list[index], ...action.payload}
+        })
+        .addCase(updateProject.rejected, (state, action) => {
+            const payload = action.payload as {name?: string, description?: string} | undefined
+            state.error = payload ? {name: payload.name || '', description: payload.description || ''} : {name: '', description: ''}
         })
     }
 })

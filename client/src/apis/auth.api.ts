@@ -101,6 +101,22 @@ export const deleteProject = createAsyncThunk("project/delete",async (id: number
         return rejectWithValue("Lỗi khi xoá dự án")
     }
 })
+
+export const updateProject = createAsyncThunk('project/update', async(payload: {id: number, name: string, image: string, description: string}, {rejectWithValue}) => {
+    try {
+        const userID = localStorage.getItem("currentUser")
+        if (!userID) return rejectWithValue({name: 'Không tìm thấy người dùng hiện tại', description: ''})
+        const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+        const duplicated = userData.projects.find(project => project.name.toLocaleLowerCase() === payload.name.toLocaleLowerCase() && project.id !== payload.id)
+        if(duplicated) return rejectWithValue({name: 'Tên dự án đã tồn tại', description: ''})
+        const updatedProjects = userData.projects.map(project => project.id === payload.id ? {...project, name: payload.name, image: payload.image, description: payload.description} : project)
+        await axios.put(`http://localhost:3000/users/${userID}`, {...userData, projects: updatedProjects})
+        return payload
+    } catch {
+        return rejectWithValue({name: '', description: 'Lỗi cập nhật dự án'})
+    }
+})
+
 export const fetchTodo = createAsyncThunk<IProject, number>('auth/fetchTodo', async (projectId) => {
     const userID = localStorage.getItem('currentUser')
     if (!userID) throw new Error('No current user')

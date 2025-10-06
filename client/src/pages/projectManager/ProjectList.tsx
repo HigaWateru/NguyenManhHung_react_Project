@@ -1,4 +1,4 @@
-import { addProject, deleteProject, fetchProject } from "@/apis/auth.api";
+import { addProject, deleteProject, fetchProject, updateProject } from "@/apis/auth.api";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import type { AppDispatch, RootState } from "@/redux/store";
@@ -71,6 +71,7 @@ export default function ProjectList() {
                       setOptModal('edit')
                       setID(project.id)
                       setOpenModal(true)
+                      setFormData({name: project.name, image: project.image, description: project.description})
                     }} className="p-4 py-1 bg-[#ffc107] rounded-md cursor-pointer">Sửa</button>
                     <button onClick={() => {
                       setID(project.id)
@@ -90,21 +91,47 @@ export default function ProjectList() {
     <Modal okText='Lưu' title={optModal === 'add' ? 'Thêm dự án' : 'Sửa dự án'} open={openModal} onCancel={() => {
       setOpenModal(false)
       setID(null)
-    }} onOk={async() => {
-      if(!validate()) return
-      try {
-        const response = await dispatch(addProject(formData))
-        if(addProject.fulfilled.match(response)) {
-          setOpenModal(false)
-          setFormData({name: '', image: '', description: ''})
-          setErrorMol({name: '', image: '', description: ''})
-          dispatch(fetchProject({page: currPage, limit: 9, search}))
-        } else if(addProject.rejected.match(response)) {
-          const payload = response.payload as {name?: string, description?: string}
-          setErrorMol({name: payload.name || '', image: '', description: payload.description || ''})
+      setErrorMol({name: '', image: '', description: ''})
+    }} onOk={async () => {
+      if (!validate()) return
+      if (optModal === "add") {
+        try {
+          const response = await dispatch(addProject(formData))
+          if (addProject.fulfilled.match(response)) {
+            setOpenModal(false)
+            setFormData({ name: "", image: "", description: "" })
+            setErrorMol({ name: "", image: "", description: "" })
+            dispatch(fetchProject({ page: currPage, limit: 9, search }))
+          } else if (addProject.rejected.match(response)) {
+            const payload = response.payload as { name?: string; description?: string }
+            setErrorMol({
+              name: payload.name || "",
+              image: "",
+              description: payload.description || ""
+            })
+          }
+        } catch (error) {
+          console.log("Lỗi thêm dự án", error)
         }
-      } catch (error) {
-        console.log("Lỗi thêm dự án", error)
+      } else {
+        try {
+          if(ID == null) {
+            setErrorMol({...errorMol, name: 'Lỗi xác định ID dự án'})
+            return
+          }
+          const response = await dispatch(updateProject({ id: ID, ...formData }))
+          if (updateProject.fulfilled.match(response)) {
+            setOpenModal(false)
+            setFormData({ name: "", image: "", description: "" })
+            setErrorMol({ name: "", image: "", description: "" })
+            dispatch(fetchProject({ page: currPage, limit: 9, search }))
+          } else if (updateProject.rejected.match(response)) {
+            const payload = response.payload as { name?: string; description?: string }
+            setErrorMol({name: payload.name || "", image: "", description: payload.description || ""})
+          }
+        } catch (error) {
+          console.log("Lỗi cập nhật dự án", error)
+        }
       }
     }}>
       <div className="flex flex-col gap-2">
