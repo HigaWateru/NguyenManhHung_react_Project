@@ -1,6 +1,6 @@
 import {  fetchTodo } from '@/apis/auth.api'
 import type { IMember } from '@/utils/types'
-import { EllipsisOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EllipsisOutlined } from '@ant-design/icons'
 import type { AppDispatch, RootState } from "@/redux/store";
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -65,7 +65,30 @@ export default function ProjectIntroduce() {
                 </div>
             </Modal>
             <Modal open={memDetailModal} title='Thành viên' onCancel={() => setMemDetailModal(false)} cancelText='Đóng' okText='Lưu'>
-
+                {(projectTodo?.members?.length ?? 0) > 0 ? (
+                    <div className='flex flex-col w-full pb-10 gap-3'>
+                        <div className='flex justify-around text-2xl py-4'>
+                            <span>Thành viên</span>
+                            <span>Vai trò</span>
+                        </div>
+                        {projectTodo?.members.map((member: IMember) => (
+                            <div className='flex w-full justify-between items-center'>
+                                <div className='flex gap-3 items-center'>
+                                    <img className='w-[40px] h-[40px] rounded-3xl object-cover border border-gray-300' src="https://png.pngtree.com/png-clipart/20230925/original/pngtree-vector-template-of-tl-initials-in-handwriting-style-with-circle-logo-png-image_12769584.png" alt="" />
+                                    <div>
+                                        <span className='text-[16px]'>{member.username}</span>
+                                        <p className='text-[14px] text-gray-500'>{member.email}</p>
+                                    </div>
+                                </div>
+                                <div className='flex gap-3 items-center'>
+                                    <input className='border border-gray-300 px-2 rounded outline-none' type="text" value={member.role}/>
+                                    <button className='text-red-500 cursor-pointer'><DeleteOutlined/></button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    ) : <div>Chưa có thành viên</div>
+                }
             </Modal>
         </div>
     )

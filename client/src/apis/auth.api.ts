@@ -1,4 +1,4 @@
-import { type IProject, type IUser } from "@/utils/types";
+import { type Todo, type IProject, type IUser } from "@/utils/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -132,4 +132,68 @@ export const fetchTodo = createAsyncThunk<IProject, number>('auth/fetchTodo', as
     const project = response.data.projects.find(project => project.id === projectId)
     if (!project) throw new Error('Project not found')
     return project
+})
+
+export const addTodo = createAsyncThunk<IProject, { projectId: string; newTodo: Omit<Todo, 'id'> }, { rejectValue: string }>('todo/addTodo', async({ projectId, newTodo }, { rejectWithValue }) => {
+    try {
+        const userID = localStorage.getItem('currentUser')
+        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+        const projectIndex = userData.projects.findIndex(project => project.id === Number(projectId))
+        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        const project = userData.projects[projectIndex]
+        const isDuplicateTitle = project.todos.some(todo => todo.title.trim().toLowerCase() === newTodo.title.trim().toLowerCase())
+        if (isDuplicateTitle) return rejectWithValue('Tên nhiệm vụ không được trùng')
+        const todoWithId: Todo = {id: `t${Date.now()}`,...newTodo}
+        const updatedProject: IProject = {...project,todos: [...project.todos, todoWithId]}
+        const updatedUser: IUser = {...userData, projects: userData.projects.map(project => project.id === updatedProject.id ? updatedProject : project)}
+        await axios.put(`http://localhost:3000/users/${userID}`, updatedUser)
+        return updatedProject
+    } catch (error) {
+        console.error('Error adding todo:', error)
+        return rejectWithValue('Lỗi hệ thống khi thêm nhiệm vụ')
+    }
+})
+
+export const updateTodo = createAsyncThunk<IProject, { projectId: string; todoId: string; updated: Omit<Todo, 'id'> }, { rejectValue: string }>('todo/updateTodo', async({ projectId, todoId, updated }, { rejectWithValue }) => {
+    try {
+        const userID = localStorage.getItem('currentUser')
+        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+        const projectIndex = userData.projects.findIndex(project => project.id === Number(projectId))
+        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        const project = userData.projects[projectIndex]
+
+        const exists = project.todos.some(todo => todo.id !== todoId && todo.title.trim().toLowerCase() === updated.title.trim().toLowerCase())
+        if (exists) return rejectWithValue('Tên nhiệm vụ không được trùng')
+
+        const updatedTodos = project.todos.map(todo => todo.id === todoId ? { id: todoId, ...updated } : todo)
+        const updatedProject: IProject = { ...project, todos: updatedTodos }
+        const updatedUser: IUser = { ...userData, projects: userData.projects.map(p => p.id === updatedProject.id ? updatedProject : p) }
+        await axios.put(`http://localhost:3000/users/${userID}`, updatedUser)
+        return updatedProject
+    } catch (error) {
+        console.error('Error updating todo:', error)
+        return rejectWithValue('Lỗi hệ thống khi sửa nhiệm vụ')
+    }
+})
+
+export const deleteTodo = createAsyncThunk<IProject, { projectId: string; todoId: string }, { rejectValue: string }>('todo/deleteTodo', async({ projectId, todoId }, { rejectWithValue }) => {
+    try {
+        const userID = localStorage.getItem('currentUser')
+        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+        const projectIndex = userData.projects.findIndex(project => project.id === Number(projectId))
+        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        const project = userData.projects[projectIndex]
+
+        const updatedTodos = project.todos.filter(todo => todo.id !== todoId)
+        const updatedProject: IProject = { ...project, todos: updatedTodos }
+        const updatedUser: IUser = { ...userData, projects: userData.projects.map(p => p.id === updatedProject.id ? updatedProject : p) }
+        await axios.put(`http://localhost:3000/users/${userID}`, updatedUser)
+        return updatedProject
+    } catch (error) {
+        console.error('Error deleting todo:', error)
+        return rejectWithValue('Lỗi hệ thống khi xoá nhiệm vụ')
+    }
 })

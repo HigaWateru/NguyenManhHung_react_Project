@@ -1,9 +1,9 @@
-import { fetchTodo } from "@/apis/auth.api";
+import { addTodo, deleteTodo, fetchTodo, updateTodo } from "@/apis/auth.api";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ProjectIntroduce from "@/components/ProjectIntroduce";
 import type { AppDispatch, RootState } from "@/redux/store";
-import type { Todo } from "@/utils/types";
+import type { IMember, Todo } from "@/utils/types";
 import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
 import { Modal, Select } from "antd";
 import React from "react";
@@ -12,34 +12,57 @@ import { useParams } from "react-router-dom";
 
 export default function ProjectDetail() {
   const [search, setSearch] = React.useState('')
-  const projectTodo = useSelector((state: RootState) => state.projectDetail.project)
+  const project = useSelector((state: RootState) => state.projectDetail.project)
+  const todos = useSelector((state: RootState) => state.projectDetail.project?.todos) || []
   const dispatch = useDispatch<AppDispatch>()
   const { id } = useParams<{ id: string }>()
 
-  const [tableOpt, setTableOpt] = React.useState<{todo: boolean, inProgress: boolean, pending: boolean, done: boolean}>({todo: true, inProgress: true, pending: false, done: false})
+  const [tableOpt, setTableOpt] = React.useState<{ todo: boolean, inProgress: boolean, pending: boolean, done: boolean }>({ todo: true, inProgress: true, pending: false, done: false })
   const [formData, setFormData] = React.useState<{
-    name: string, 
-    personChange: string, 
-    status: 'to-do' | 'in-progress' | 'pending' | 'done' | null, 
+    name: string,
+    personChange: string,
+    status: 'to-do' | 'in-progress' | 'pending' | 'done' | null,
     startDate: string,
     endDate: string,
     priority: 'low' | 'medium' | 'high' | null,
     progress: 'scheduled' | 'in-progress' | 'delayed' | null
-  }>({name: '', personChange: '', status: null, startDate: '', endDate: '', priority: null, progress: null})
+  }>({ name: '', personChange: '', status: null, startDate: '', endDate: '', priority: null, progress: null })
   const [openModal, setOpenModal] = React.useState<boolean>(false)
   const [optModal, setOptModal] = React.useState<'add' | 'edit'>('add')
   const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false)
+
+  const [errorMol, setErrorMol] = React.useState<{ name: string, personChange: string, status: string, startDate: string, endDate: string, priority: string, progress: string }>
+    ({ name: '', personChange: '', status: '', startDate: '', endDate: '', priority: '', progress: '' })
+
+  const validate = (): boolean => {
+    const errors = { name: '', personChange: '', status: '', startDate: '', endDate: '', priority: '', progress: '' }
+    if (!formData.name.trim()) errors.name = 'Tên nhiệm vụ không được để trống'
+    if (!formData.personChange) errors.personChange = 'Vui lòng chọn người phụ trách'
+    if (!formData.status) errors.status = 'Vui lòng chọn status nhiệm vụ'
+    if (!formData.startDate) errors.startDate = 'Vui lòng chọn ngày bắt đầu'
+    if (!formData.endDate) errors.endDate = 'Vui lòng chọn thời gian hạn chót'
+    else if (new Date(formData.endDate) < new Date(formData.startDate)) errors.endDate = 'Hạn chót không hợp lệ'
+    if (!formData.priority) errors.priority = 'Vui lòng chọn độ ưu tiên'
+    if (!formData.progress) errors.progress = 'Vui lòng chọn tiến độ'
+    setErrorMol(errors)
+
+    return !errors.name && !errors.personChange && !errors.status && !errors.startDate && !errors.endDate && !errors.priority && !errors.progress
+  }
+
+
   const [ID, setID] = React.useState<string>('')
 
   React.useEffect(() => {
-    dispatch(fetchTodo(Number(id)))
-  }, [dispatch])
+    if (id) {
+      dispatch(fetchTodo(Number(id)))
+    }
+  }, [dispatch, id])
 
   return <div className="h-[100vh] w-[100vw] flex flex-col justify-between">
     <Header />
     <main className="p-10 flex flex-col items-center gap-6 overflow-auto">
       <div className="w-[1200px] text-[16px] flex flex-col gap-6">
-        <ProjectIntroduce/>
+        <ProjectIntroduce />
         <div className="flex justify-between">
           <button onClick={() => {
             setOptModal('add')
@@ -47,11 +70,11 @@ export default function ProjectDetail() {
           }} className="bg-[#007bff] text-white px-3 py-1 rounded-md cursor-pointer">+ Thêm nhiệm vụ</button>
           <div className="flex gap-4">
             <Select style={{ width: 200, height: 40 }} placeholder="Sắp xếp theo" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
-              { value: 'todo', label: 'To do' }, 
-              { value: 'inprogress', label: 'In progress' }, 
+              { value: 'todo', label: 'To do' },
+              { value: 'inprogress', label: 'In progress' },
               { value: 'done', label: 'Done' }
             ]} />
-            <input value={search} onChange={e => setSearch(e.target.value)} className="border border-gray-300 rounded-md px-3 py-1 outline-none w-[300px]" type="text" placeholder="Tìm kiếm nhiệm vụ"/>
+            <input value={search} onChange={e => setSearch(e.target.value)} className="border border-gray-300 rounded-md px-3 py-1 outline-none w-[300px]" type="text" placeholder="Tìm kiếm nhiệm vụ" />
           </div>
         </div>
       </div>
@@ -70,23 +93,23 @@ export default function ProjectDetail() {
             </tr>
           </thead>
           <tbody>
-            <tr onClick={() => setTableOpt({...tableOpt, todo: !tableOpt.todo})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.todo ? <CaretDownOutlined /> : <CaretRightOutlined/>} Todo</td></tr>
-            {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+            <tr onClick={() => setTableOpt({ ...tableOpt, todo: !tableOpt.todo })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.todo ? <CaretDownOutlined /> : <CaretRightOutlined />} Todo</td></tr>
+            {todos.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.todo ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
-                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
-                  todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
-                }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                  }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
                 <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.startDate).toLocaleDateString('vi-VN')}</td>
                 <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.endDate).toLocaleDateString('vi-VN')}</td>
-                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
-                  todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
-                }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                  }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
                 <td className="text-center border border-gray-300">
                   <div className="flex justify-center gap-3 ">
                     <button onClick={() => {
                       setOptModal('edit')
+                      setFormData({ name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress })
+                      setID(todo.id)
                       setOpenModal(true)
                     }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
                     <button onClick={() => {
@@ -97,23 +120,23 @@ export default function ProjectDetail() {
                 </td>
               </tr>
             ))}
-            <tr onClick={() => setTableOpt({...tableOpt, inProgress: !tableOpt.inProgress})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.inProgress ? <CaretDownOutlined /> : <CaretRightOutlined/>} In Progress</td></tr>
-            {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+            <tr onClick={() => setTableOpt({ ...tableOpt, inProgress: !tableOpt.inProgress })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.inProgress ? <CaretDownOutlined /> : <CaretRightOutlined />} In Progress</td></tr>
+            {todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.inProgress ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
-                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
-                  todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
-                }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                  }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
                 <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.startDate).toLocaleDateString('vi-VN')}</td>
                 <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.endDate).toLocaleDateString('vi-VN')}</td>
-                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
-                  todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
-                }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                  }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
                 <td className="text-center border border-gray-300">
                   <div className="flex justify-center gap-3 ">
                     <button onClick={() => {
                       setOptModal('edit')
+                      setFormData({ name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress })
+                      setID(todo.id)
                       setOpenModal(true)
                     }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
                     <button onClick={() => {
@@ -124,23 +147,23 @@ export default function ProjectDetail() {
                 </td>
               </tr>
             ))}
-            <tr onClick={() => setTableOpt({...tableOpt, pending: !tableOpt.pending})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.pending ? <CaretDownOutlined /> : <CaretRightOutlined/>} Pending</td></tr>
-            {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+            <tr onClick={() => setTableOpt({ ...tableOpt, pending: !tableOpt.pending })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.pending ? <CaretDownOutlined /> : <CaretRightOutlined />} Pending</td></tr>
+            {todos.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.pending ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
-                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
-                  todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
-                }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                  }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
                 <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.startDate).toLocaleDateString('vi-VN')}</td>
                 <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.endDate).toLocaleDateString('vi-VN')}</td>
-                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
-                  todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
-                }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                  }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
                 <td className="text-center border border-gray-300">
                   <div className="flex justify-center gap-3 ">
                     <button onClick={() => {
                       setOptModal('edit')
+                      setFormData({ name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress })
+                      setID(todo.id)
                       setOpenModal(true)
                     }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
                     <button onClick={() => {
@@ -151,23 +174,23 @@ export default function ProjectDetail() {
                 </td>
               </tr>
             ))}
-            <tr onClick={() => setTableOpt({...tableOpt, done: !tableOpt.done})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.done ? <CaretDownOutlined /> : <CaretRightOutlined/>} Done</td></tr>
-            {projectTodo?.todos?.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+            <tr onClick={() => setTableOpt({ ...tableOpt, done: !tableOpt.done })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.done ? <CaretDownOutlined /> : <CaretRightOutlined />} Done</td></tr>
+            {todos.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.done ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
-                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
-                  todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
-                }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${todo.priority === 'low' ? 'bg-[#0dcaf0]' : todo.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                  }`}>{todo.priority === 'low' ? 'Thấp' : todo.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
                 <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.startDate).toLocaleDateString('vi-VN')}</td>
                 <td className="text-center border border-gray-300 text-blue-600">{new Date(todo.endDate).toLocaleDateString('vi-VN')}</td>
-                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${
-                  todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
-                }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
+                <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${todo.progress === 'scheduled' ? 'bg-[#198754]' : todo.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
+                  }`}>{todo.progress === 'scheduled' ? 'Đúng tiến độ' : todo.progress === 'in-progress' ? 'Có rủi ro' : 'Trễ hạn'}</span></td>
                 <td className="text-center border border-gray-300">
                   <div className="flex justify-center gap-3 ">
                     <button onClick={() => {
                       setOptModal('edit')
+                      setFormData({ name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress })
+                      setID(todo.id)
                       setOpenModal(true)
                     }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
                     <button onClick={() => {
@@ -186,64 +209,123 @@ export default function ProjectDetail() {
     <Footer />
     <Modal open={openModal} maskClosable={false} okText='Lưu' title={optModal === 'add' ? 'Thêm nhiệm vụ' : 'Sửa nhiệm vụ'} onCancel={() => {
       setOpenModal(false)
-    }} onOk={() => {}}>
+      setFormData({ name: '', personChange: '', status: null, startDate: '', endDate: '', priority: null, progress: null })
+    }} onOk={async () => {
+      if (!validate()) return
+      const member = project!.members.find(m => m.username === formData.personChange)
+      if (!member) {
+        setErrorMol(prev => ({ ...prev, personChange: "Người phụ trách không hợp lệ" }))
+        return
+      }
+      if (optModal === 'add') {
+        try {
+          const newTodo: Omit<Todo, "id"> = {
+            title: formData.name.trim(),
+            personChange: member,
+            status: formData.status!,
+            startDate: formData.startDate,
+            endDate: formData.endDate,
+            priority: formData.priority!,
+            progress: formData.progress!,
+          }
+          const result = await dispatch(addTodo({ projectId: project!.id.toString(), newTodo }))
+          if (addTodo.rejected.match(result)) {
+            setErrorMol(prev => ({ ...prev, name: result.payload as string }))
+            return
+          }
+          setOpenModal(false)
+          setFormData({ name: "", personChange: "", status: null, startDate: "", endDate: "", priority: null, progress: null })
+        } catch {
+          console.log('Lỗi thêm nhiệm vụ')
+        }
+      } else {
+        try {
+          const updated: Omit<Todo, 'id'> = {
+            title: formData.name.trim(),
+            personChange: member,
+            status: formData.status!,
+            startDate: formData.startDate,
+            endDate: formData.endDate,
+            priority: formData.priority!,
+            progress: formData.progress!,
+          }
+          const result = await dispatch(updateTodo({ projectId: project!.id.toString(), todoId: ID, updated }))
+          if (updateTodo.rejected.match(result)) {
+            setErrorMol(prev => ({ ...prev, name: result.payload as string }))
+            return
+          }
+          setOpenModal(false)
+          setFormData({ name: "", personChange: "", status: null, startDate: "", endDate: "", priority: null, progress: null })
+        } catch {
+          console.log('Lỗi sửa nhiệm vụ')
+        }
+      }
+    }}>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Tên nhiệm vụ</label>
-        <input type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
-        <p className="text-red-500 text-sm"></p>
+        <input onChange={event => setFormData({ ...formData, name: event.target.value })} value={formData.name} type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
+        <p className="text-red-500 text-sm">{errorMol.name}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Người phụ trách</label>
-        <Select style={{ width: 470, height: 50 }} placeholder="Chọn người phụ trách" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
-          { value: 'm1', label: 'Nguyen A' }, 
-          { value: 'm2', label: 'Nguyen B' }, 
-          { value: 'm3', label: 'Nguyen C' }
-        ]} />
-        <p className="text-red-500 text-sm"></p>
+        <Select value={formData.personChange} style={{ width: 470, height: 50 }} placeholder="Chọn người phụ trách" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={
+          project?.members.map((member: IMember) => ({
+            value: member.username, label: member.username
+          }))
+        } onChange={value => setFormData({ ...formData, personChange: value })} />
+        <p className="text-red-500 text-sm">{errorMol.personChange}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Trạng thái</label>
-        <Select style={{ width: 470, height: 50 }} placeholder="Chọn trạng thái nhiệm vụ" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
-          { value: 'to-do', label: 'To do' }, 
-          { value: 'in-progress', label: 'In progress' }, 
-          { value: 'pending', label: 'Pending'},
+        <Select value={formData.status} style={{ width: 470, height: 50 }} placeholder="Chọn trạng thái nhiệm vụ" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+          { value: 'to-do', label: 'To do' },
+          { value: 'in-progress', label: 'In progress' },
+          { value: 'pending', label: 'Pending' },
           { value: 'done', label: 'Done' }
-        ]} />
-        <p className="text-red-500 text-sm"></p>
+        ]} onChange={value => setFormData({ ...formData, status: value })} />
+        <p className="text-red-500 text-sm">{errorMol.status}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Ngày bắt đầu</label>
-        <input type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
-        <p className="text-red-500 text-sm"></p>
+        <input onChange={event => setFormData({ ...formData, startDate: event.target.value })} value={formData.startDate} type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
+        <p className="text-red-500 text-sm">{errorMol.startDate}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Ngày kết thúc</label>
-        <input type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
-        <p className="text-red-500 text-sm"></p>
+        <input onChange={event => setFormData({ ...formData, endDate: event.target.value })} value={formData.endDate} type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
+        <p className="text-red-500 text-sm">{errorMol.endDate}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Độ ưu tiên</label>
-        <Select style={{ width: 470, height: 50 }} placeholder="Chọn độ ưu tiên" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
-          { value: 'low', label: 'Thấp' }, 
-          { value: 'medium', label: 'Trung bình' }, 
+        <Select value={formData.priority} style={{ width: 470, height: 50 }} placeholder="Chọn độ ưu tiên" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+          { value: 'low', label: 'Thấp' },
+          { value: 'medium', label: 'Trung bình' },
           { value: 'high', label: 'Cao' }
-        ]} />
-        <p className="text-red-500 text-sm"></p>
+        ]} onChange={value => setFormData({ ...formData, priority: value })} />
+        <p className="text-red-500 text-sm">{errorMol.priority}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Tiến độ</label>
-        <Select style={{ width: 470, height: 50 }} placeholder="Chọn tiến độ" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
-          { value: 'scheduled', label: 'Đúng tiến độ' }, 
-          { value: 'in-progress', label: 'Có rủi ro' }, 
+        <Select value={formData.progress} style={{ width: 470, height: 50 }} placeholder="Chọn tiến độ" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+          { value: 'scheduled', label: 'Đúng tiến độ' },
+          { value: 'in-progress', label: 'Có rủi ro' },
           { value: 'delayed', label: 'Trễ hạn' }
-        ]} />
-        <p className="text-red-500 text-sm"></p>
+        ]} onChange={value => setFormData({ ...formData, progress: value })} />
+        <p className="text-red-500 text-sm">{errorMol.progress}</p>
       </div>
     </Modal>
     <Modal title='Xác nhận xoá' open={confirmDelete} onCancel={() => {
       setConfirmDelete(false)
-    }} onOk={() => { }} okText='Xoá' okType="danger">
-      <p>Bạn có chắc chắn xoá nhiệm vụ này</p>
+    }} onOk={async () => {
+      try {
+        const result = await dispatch(deleteTodo({ projectId: project!.id.toString(), todoId: ID }))
+        if (deleteTodo.rejected.match(result)) return
+        setConfirmDelete(false)
+      } catch {
+        console.log('Lỗi xoá nhiệm vụ')
+      }
+    }} okText='Xoá' okType="danger">
+      <p>Bạn có chắc chắn xoá nhiệm vụ <span className="font-medium">{todos.find(todo => todo.id === ID)?.title || 'Not found'}</span></p>
     </Modal>
   </div>;
 }

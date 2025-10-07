@@ -188,6 +188,21 @@
               "endDate": "2025-09-22",
               "progress": "scheduled",
               "status": "to-do"
+            },
+            {
+              "id": "t1759825791598",
+              "title": "Tạo giao diện câu hỏi",
+              "personChange": {
+                "id": "m05",
+                "username": "Đỗ Huy",
+                "email": "dohuy@example.com",
+                "role": "Database Engineer"
+              },
+              "status": "done",
+              "startDate": "2025-09-28",
+              "endDate": "2025-11-08",
+              "priority": "medium",
+              "progress": "in-progress"
             }
           ]
         },
@@ -236,14 +251,6 @@
           "name": "Dự án 5",
           "image": "https://bvhttdl.mediacdn.vn/291773308735864832/2023/4/18/z4185845632861cc3e4b2c6af790743f4084cb27e827a8-16818104590141673763448.jpg",
           "description": "Dự án 5 (tạm thời là vậy)",
-          "todos": [],
-          "members": []
-        },
-        {
-          "id": 9,
-          "name": "Dự án 6",
-          "image": "https://igcons.vn/wp-content/uploads/2023/09/nhung-ung-dung-cong-nghe-hien-dai-vao-xay-dung-noi-bat-nhat-hien-nay.jpg",
-          "description": "Dự án 6 (tạm thời để là vậy)",
           "todos": [],
           "members": []
         },
