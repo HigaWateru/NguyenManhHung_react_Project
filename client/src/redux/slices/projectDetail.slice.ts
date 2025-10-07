@@ -1,4 +1,4 @@
-import { addTodo, deleteTodo, fetchTodo, updateTodo } from "@/apis/auth.api"
+import { addMember, addTodo, deleteMember, deleteTodo, fetchTodo, updateMember, updateTodo } from "@/apis/auth.api"
 import type { IProject, Todo } from "@/utils/types"
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
@@ -74,6 +74,45 @@ const projectDetailSlice = createSlice({
         .addCase(deleteTodo.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload || 'Lỗi khi xoá nhiệm vụ'
+        })
+
+        .addCase(addMember.pending, (state) => {
+            state.error = ''
+            state.loading = true
+        })
+        .addCase(addMember.fulfilled, (state, action) => {
+            state.loading = false
+            state.project = action.payload
+        })
+        .addCase(addMember.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload || 'Lỗi khi thêm thành viên'
+        })
+
+        .addCase(updateMember.pending, (state) => {
+            state.error = ''
+            state.loading = true
+        })
+        .addCase(updateMember.fulfilled, (state, action) => {
+            state.loading = false
+            state.project = action.payload
+        })
+        .addCase(updateMember.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload || 'Lỗi khi sửa thành viên'
+        })
+
+        .addCase(deleteMember.pending, (state) => {
+            state.error = ''
+            state.loading = true
+        })
+        .addCase(deleteMember.fulfilled, (state, action) => {
+            state.loading = false
+            state.project = action.payload
+        })
+        .addCase(deleteMember.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload || 'Lỗi khi xoá thành viên'
         })
     }
 

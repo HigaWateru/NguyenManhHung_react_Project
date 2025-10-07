@@ -1,4 +1,4 @@
-import { type Todo, type IProject, type IUser } from "@/utils/types";
+import { type Todo, type IProject, type IUser, type IMember } from "@/utils/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -169,7 +169,7 @@ export const updateTodo = createAsyncThunk<IProject, { projectId: string; todoId
 
         const updatedTodos = project.todos.map(todo => todo.id === todoId ? { id: todoId, ...updated } : todo)
         const updatedProject: IProject = { ...project, todos: updatedTodos }
-        const updatedUser: IUser = { ...userData, projects: userData.projects.map(p => p.id === updatedProject.id ? updatedProject : p) }
+        const updatedUser: IUser = { ...userData, projects: userData.projects.map(project => project.id === updatedProject.id ? updatedProject : project)}
         await axios.put(`http://localhost:3000/users/${userID}`, updatedUser)
         return updatedProject
     } catch (error) {
@@ -183,6 +183,7 @@ export const deleteTodo = createAsyncThunk<IProject, { projectId: string; todoId
         const userID = localStorage.getItem('currentUser')
         if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
         const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+
         const projectIndex = userData.projects.findIndex(project => project.id === Number(projectId))
         if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
         const project = userData.projects[projectIndex]
@@ -195,5 +196,83 @@ export const deleteTodo = createAsyncThunk<IProject, { projectId: string; todoId
     } catch (error) {
         console.error('Error deleting todo:', error)
         return rejectWithValue('Lỗi hệ thống khi xoá nhiệm vụ')
+    }
+})
+
+export const addMember = createAsyncThunk<IProject, { projectId: string; email: string; role: string }, { rejectValue: string }>('member/addMember', async({ projectId, email, role }, { rejectWithValue }) => {
+    try {
+        const userID = localStorage.getItem('currentUser')
+        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        const [{ data: currentUser }, { data: allUsers }] = await Promise.all([
+            axios.get<IUser>(`http://localhost:3000/users/${userID}`),
+            axios.get<IUser[]>(`http://localhost:3000/users`),
+        ])
+
+        const projectIndex = currentUser.projects.findIndex(project => project.id === Number(projectId))
+        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        const userToAdd = allUsers.find(user => user.email.trim().toLowerCase() === email.trim().toLowerCase())
+        if (!userToAdd) return rejectWithValue('Email không tồn tại trong hệ thống')
+        const project = currentUser.projects[projectIndex]
+        const exists = project.members.some(member => member.id === userToAdd.id)
+        if (exists) return rejectWithValue('Thành viên đã tồn tại trong dự án')
+        const rawName: string | undefined = (userToAdd as unknown as { name?: string }).name
+        const baseUsername = userToAdd.username || rawName || userToAdd.email.split('@')[0]
+        const composedUsername = userToAdd.username && rawName && userToAdd.username !== rawName ? `${userToAdd.username} (${rawName})` : baseUsername
+        const newMember: IMember = {
+            id: userToAdd.id,
+            username: composedUsername,
+            email: userToAdd.email,
+            role: role.trim() || 'Member'
+        }
+
+        const updatedProject: IProject = { ...project, members: [...project.members, newMember]}
+        const updatedUser: IUser = {...currentUser, projects: currentUser.projects.map(project => project.id === updatedProject.id ? updatedProject : project)}
+        await axios.put(`http://localhost:3000/users/${userID}`, updatedUser)
+        return updatedProject
+    } catch (error) {
+        console.error('Error adding member:', error)
+        return rejectWithValue('Lỗi hệ thống khi thêm thành viên')
+    }
+})
+
+export const updateMember = createAsyncThunk<IProject, { projectId: string; memberId: string; role: string }, { rejectValue: string }>('member/updateMember', async({ projectId, memberId, role }, { rejectWithValue }) => {
+    try {
+        const userID = localStorage.getItem('currentUser')
+        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        const { data: currentUser } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+
+        const projectIndex = currentUser.projects.findIndex(project => project.id === Number(projectId))
+        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        const project = currentUser.projects[projectIndex]
+
+        const updatedMembers = project.members.map(member => (member.id === memberId ? {...member, role} : member))
+        const updatedProject: IProject = { ...project, members: updatedMembers }
+        const updatedUser: IUser = {...currentUser, projects: currentUser.projects.map(project => project.id === updatedProject.id ? updatedProject : project)}
+        await axios.put(`http://localhost:3000/users/${userID}`, updatedUser)
+        return updatedProject
+    } catch (error) {
+        console.error('Error updating member:', error)
+        return rejectWithValue('Lỗi hệ thống khi sửa thành viên')
+    }
+})
+
+export const deleteMember = createAsyncThunk<IProject, { projectId: string; memberId: string }, { rejectValue: string }>('member/deleteMember', async({ projectId, memberId }, { rejectWithValue }) => {
+    try {
+        const userID = localStorage.getItem('currentUser')
+        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        const { data: currentUser } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+
+        const projectIndex = currentUser.projects.findIndex((p) => p.id === Number(projectId))
+        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        const project = currentUser.projects[projectIndex]
+
+        const updatedMembers = project.members.filter(member => member.id !== memberId)
+        const updatedProject: IProject = { ...project, members: updatedMembers }
+        const updatedUser: IUser = {...currentUser, projects: currentUser.projects.map(project => project.id === updatedProject.id ? updatedProject : project)}
+        await axios.put(`http://localhost:3000/users/${userID}`, updatedUser)
+        return updatedProject
+    } catch (error) {
+        console.error('Error deleting member:', error)
+        return rejectWithValue('Lỗi hệ thống khi xoá thành viên')
     }
 })

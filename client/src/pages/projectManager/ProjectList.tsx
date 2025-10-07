@@ -91,6 +91,7 @@ export default function ProjectList() {
       setOpenModal(false)
       setID(null)
       setErrorMol({name: '', image: '', description: ''})
+      setFormData({name: '', image: '', description: ''})
     }} onOk={async () => {
       if (!validate()) return
       if (optModal === "add") {

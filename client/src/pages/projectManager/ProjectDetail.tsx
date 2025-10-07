@@ -40,6 +40,7 @@ export default function ProjectDetail() {
     if (!formData.personChange) errors.personChange = 'Vui lòng chọn người phụ trách'
     if (!formData.status) errors.status = 'Vui lòng chọn status nhiệm vụ'
     if (!formData.startDate) errors.startDate = 'Vui lòng chọn ngày bắt đầu'
+    else if(new Date() > new Date(formData.startDate)) errors.startDate = 'Ngày bắt đầu phải lớn hơn thời gian hiện tại'
     if (!formData.endDate) errors.endDate = 'Vui lòng chọn thời gian hạn chót'
     else if (new Date(formData.endDate) < new Date(formData.startDate)) errors.endDate = 'Hạn chót không hợp lệ'
     if (!formData.priority) errors.priority = 'Vui lòng chọn độ ưu tiên'
@@ -210,6 +211,7 @@ export default function ProjectDetail() {
     <Modal open={openModal} maskClosable={false} okText='Lưu' title={optModal === 'add' ? 'Thêm nhiệm vụ' : 'Sửa nhiệm vụ'} onCancel={() => {
       setOpenModal(false)
       setFormData({ name: '', personChange: '', status: null, startDate: '', endDate: '', priority: null, progress: null })
+      setErrorMol({ name: '', personChange: '', status: '', startDate: '', endDate: '', priority: '', progress: '' })
     }} onOk={async () => {
       if (!validate()) return
       const member = project!.members.find(m => m.username === formData.personChange)
