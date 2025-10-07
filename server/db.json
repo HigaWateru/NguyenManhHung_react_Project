@@ -193,9 +193,73 @@
         },
         {
           "id": 3,
-          "name": "Ứng dụng quản lý máy tính",
+          "name": "Ứng dụng học ReactJS",
           "image": "https://cdn-media.sforum.vn/storage/app/media/HuynhUy/React%20l%C3%A0%20g%C3%ACH%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20chi%20ti%E1%BA%BFt%20cho%20ng%C6%B0%E1%BB%9Di%20m%E1%BB%9Bi%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u/react-la-gi-thumb.jpg",
-          "description": "Ứng dụng quản lý máy tính (Không hẳn là vậy)",
+          "description": "Ứng dụng hướng đến những người muốn tìm hiểu về ReactJS ",
+          "todos": [],
+          "members": []
+        },
+        {
+          "id": 4,
+          "name": "Dự án 1",
+          "image": "https://media.vneconomy.vn/images/upload/2023/10/18/tieu-chi-du-an-ung-dung-cong-nghe-cao-de-san-xuat-san-pham-cong-nghe-cao.jpg",
+          "description": "Dự án 1 (tạm thời để như thế)",
+          "todos": [],
+          "members": []
+        },
+        {
+          "id": 5,
+          "name": "Dự án 2",
+          "image": "https://dienbien.edu.vn/uploads/news/2017_08/cntt.jpg",
+          "description": "Dự án 2 (tạm thời là vậy)",
+          "todos": [],
+          "members": []
+        },
+        {
+          "id": 6,
+          "name": "Dự án 3",
+          "image": "https://evngenco2.vn/uploads/news/2022_01/image-20220104100420-2.jpeg",
+          "description": "Dự án 3 (tạm thời là vậy)",
+          "todos": [],
+          "members": []
+        },
+        {
+          "id": 7,
+          "name": "Dự án 4",
+          "image": "https://media.vov.vn/sites/default/files/styles/large/public/2024-09/9d43c4da0c1daa43f30c.jpg",
+          "description": "Dự án 4 (tạm thời là vậy)",
+          "todos": [],
+          "members": []
+        },
+        {
+          "id": 8,
+          "name": "Dự án 5",
+          "image": "https://bvhttdl.mediacdn.vn/291773308735864832/2023/4/18/z4185845632861cc3e4b2c6af790743f4084cb27e827a8-16818104590141673763448.jpg",
+          "description": "Dự án 5 (tạm thời là vậy)",
+          "todos": [],
+          "members": []
+        },
+        {
+          "id": 9,
+          "name": "Dự án 6",
+          "image": "https://igcons.vn/wp-content/uploads/2023/09/nhung-ung-dung-cong-nghe-hien-dai-vao-xay-dung-noi-bat-nhat-hien-nay.jpg",
+          "description": "Dự án 6 (tạm thời để là vậy)",
+          "todos": [],
+          "members": []
+        },
+        {
+          "id": 10,
+          "name": "Dự án 7",
+          "image": "https://cdn.thuviennhadat.vn/upload/bds/LPKA/du-an-cong-nghe.jpg",
+          "description": "Dự án 7 (tạm thời là vậy)",
+          "todos": [],
+          "members": []
+        },
+        {
+          "id": 11,
+          "name": "Mua bán skin AOV",
+          "image": "https://res.cloudinary.com/dxkw3nupk/image/upload/v1759799167/quxb4lcz9wecptqhcc9t.jpg",
+          "description": "Đây là khu chợ mua bán các skin mới nhất của gà rán LQMB",
           "todos": [],
           "members": []
         }

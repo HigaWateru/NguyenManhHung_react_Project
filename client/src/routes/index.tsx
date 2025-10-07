@@ -1,4 +1,5 @@
 import LazyLoad from "@/components/LazyLoad";
+import MyTask from "@/pages/projectManager/MyTask";
 import ProductDetail from "@/pages/projectManager/ProjectDetail";
 import ProjectList from "@/pages/projectManager/ProjectList";
 import React from "react";
@@ -23,6 +24,10 @@ const routers = createBrowserRouter([
   {
     path: "projects/:id",
     element: <LazyLoad children={<ProductDetail/>}/>,
+  },
+  {
+    path: "mytask",
+    element: <LazyLoad children={<MyTask/>}/>
   }
 ]);
 

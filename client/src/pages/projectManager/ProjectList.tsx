@@ -1,9 +1,9 @@
-import { addProject, deleteProject, fetchProject, updateProject } from "@/apis/auth.api";
+import { addProject, deleteProject, fetchProject, updateProject, uploadImg } from "@/apis/auth.api";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import type { AppDispatch, RootState } from "@/redux/store";
 import type { IProject } from "@/utils/types";
-import { Modal, Pagination } from "antd";
+import { message, Modal, Pagination } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -33,11 +33,10 @@ export default function ProjectList() {
 
   React.useEffect(() => {
     const timeout = setTimeout(() => {
-      dispatch(fetchProject({ page: 1, limit: 9, search }))
-      setCurrPage(1)
-    }, 400)
+      dispatch(fetchProject({ page: currPage, limit: 9, search }))
+    }, 200)
     return () => clearTimeout(timeout)
-  }, [search, dispatch])
+  }, [search, dispatch, currPage])
 
   return <div className="h-[100vh] w-[100vw] flex flex-col justify-between content-between ">
     <Header />
@@ -136,12 +135,22 @@ export default function ProjectList() {
     }}>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Tên dự án</label>
-        <input value={formData.name} onChange={event => setFormData({...formData, name: event.target.value})} type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
+        <input value={formData.name} onChange={event => setFormData({...formData, name: event.target.value})} type="text" className="border border-gray-300 rounded-md p-3 outline-none " />
         <p className="text-red-500 text-sm">{errorMol.name}</p>
       </div>
       <div className="flex flex-col gap-2">
-        <label className="font-medium">Hình ảnh dự án (Tạm thời để bằng đường link)</label>
-        <input value={formData.image} onChange={event => setFormData({...formData, image: event.target.value})} type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
+        <label className="font-medium">Hình ảnh dự án</label>
+        <input onChange={async(event) => {
+          const file = event.target.files?.[0]
+          if(!file) return
+          try {
+            const imgUrl = await uploadImg(file)
+            setFormData({...formData, image: imgUrl})
+            message.success('Tải ảnh thành công')
+          } catch {
+            message.error('Lỗi tải ảnh lên Cloudinary')
+          }
+        }} type="file" accept="image/*" className="border border-gray-300 rounded-md p-3 outline-none cursor-pointer" />
         <p className="text-red-500 text-sm"></p>
       </div>
       <div className="flex flex-col gap-2">

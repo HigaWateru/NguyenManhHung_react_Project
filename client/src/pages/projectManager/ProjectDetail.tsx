@@ -35,7 +35,7 @@ export default function ProjectDetail() {
     dispatch(fetchTodo(Number(id)))
   }, [dispatch])
 
-  return <div className="h-[100vh] w-[100vw] flex flex-col justify-between  ">
+  return <div className="h-[100vh] w-[100vw] flex flex-col justify-between">
     <Header />
     <main className="p-10 flex flex-col items-center gap-6 overflow-auto">
       <div className="w-[1200px] text-[16px] flex flex-col gap-6">

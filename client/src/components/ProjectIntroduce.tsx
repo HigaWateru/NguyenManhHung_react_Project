@@ -20,7 +20,7 @@ export default function ProjectIntroduce() {
   }, [dispatch])
     return (
         <div className='flex justify-between'>
-            <div className='max-w-[700px]'>
+            <div className='max-w-[650px]'>
                 <h2 className='font-semibold text-2xl mb-6'>{projectTodo?.name}</h2>
                 <div className='flex gap-6'>
                     <img className='w-[200px]' src={projectTodo?.image} alt="Thương mại điện tử" />
