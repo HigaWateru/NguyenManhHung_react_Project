@@ -10,7 +10,7 @@ export default function Header() {
     const dispatch = useDispatch<AppDispatch>()
 
     const theme = React.useMemo(() => {
-        if (location.pathname.startsWith('/mytask')) return 'mytask'
+        if(location.pathname.startsWith('/mytask')) return 'mytask'
         return 'projects'
     }, [location.pathname])
 

@@ -23,7 +23,7 @@ export default function ProjectIntroduce() {
     const [addMemError, setAddMemError] = React.useState<{email: string, role: string}>({email: '', role: ''})
 
     React.useEffect(() => {
-        dispatch(fetchTodo(Number(id)))
+        dispatch(fetchTodo({projectId: Number(id), search: ''}))
     }, [dispatch, id])
     return (
         <div className='flex justify-between'>

@@ -32,3 +32,20 @@ export interface IUser {
     password: string
     projects: IProject[]
 }
+
+export interface MyTask {
+    projects: {
+        id: number
+        name: string
+        tasks: {
+            id: string
+            name: string
+            priority: 'low' | 'medium' | 'high'
+            status: 'to-do' | 'in-progress' | 'pending' | 'done'
+            startDate: string
+            endDate: string
+            progress: 'scheduled' | 'in-progress' | 'delayed'
+        }[]
+    }[]
+}
+

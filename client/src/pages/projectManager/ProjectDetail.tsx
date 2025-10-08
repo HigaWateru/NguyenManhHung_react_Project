@@ -36,15 +36,15 @@ export default function ProjectDetail() {
 
   const validate = (): boolean => {
     const errors = { name: '', personChange: '', status: '', startDate: '', endDate: '', priority: '', progress: '' }
-    if (!formData.name.trim()) errors.name = 'Tên nhiệm vụ không được để trống'
-    if (!formData.personChange) errors.personChange = 'Vui lòng chọn người phụ trách'
-    if (!formData.status) errors.status = 'Vui lòng chọn status nhiệm vụ'
-    if (!formData.startDate) errors.startDate = 'Vui lòng chọn ngày bắt đầu'
+    if(!formData.name.trim()) errors.name = 'Tên nhiệm vụ không được để trống'
+    if(!formData.personChange) errors.personChange = 'Vui lòng chọn người phụ trách'
+    if(!formData.status) errors.status = 'Vui lòng chọn status nhiệm vụ'
+    if(!formData.startDate) errors.startDate = 'Vui lòng chọn ngày bắt đầu'
     else if(new Date() > new Date(formData.startDate)) errors.startDate = 'Ngày bắt đầu phải lớn hơn thời gian hiện tại'
-    if (!formData.endDate) errors.endDate = 'Vui lòng chọn thời gian hạn chót'
-    else if (new Date(formData.endDate) < new Date(formData.startDate)) errors.endDate = 'Hạn chót không hợp lệ'
-    if (!formData.priority) errors.priority = 'Vui lòng chọn độ ưu tiên'
-    if (!formData.progress) errors.progress = 'Vui lòng chọn tiến độ'
+    if(!formData.endDate) errors.endDate = 'Vui lòng chọn thời gian hạn chót'
+    else if(new Date(formData.endDate) < new Date(formData.startDate)) errors.endDate = 'Hạn chót không hợp lệ'
+    if(!formData.priority) errors.priority = 'Vui lòng chọn độ ưu tiên'
+    if(!formData.progress) errors.progress = 'Vui lòng chọn tiến độ'
     setErrorMol(errors)
 
     return !errors.name && !errors.personChange && !errors.status && !errors.startDate && !errors.endDate && !errors.priority && !errors.progress
@@ -54,10 +54,8 @@ export default function ProjectDetail() {
   const [ID, setID] = React.useState<string>('')
 
   React.useEffect(() => {
-    if (id) {
-      dispatch(fetchTodo(Number(id)))
-    }
-  }, [dispatch, id])
+    if(id) dispatch(fetchTodo({projectId: Number(id), search}))
+  }, [dispatch, id, search])
 
   return <div className="h-[100vh] w-[100vw] flex flex-col justify-between">
     <Header />
@@ -82,17 +80,17 @@ export default function ProjectDetail() {
       <div className="border w-[1200px] border-gray-100 rounded-md p-6 flex flex-col gap-6 shadow-xl text-[16px]">
         <h2 className="text-xl font-semibold">Danh sách nhiệm vụ</h2>
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Tên Nhiệm Vụ</th>
-              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Người phụ trách</th>
-              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Ưu tiên</th>
-              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Ngày bắt đầu</th>
-              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hạn chót</th>
-              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Tiến độ</th>
-              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hành động</th>
-            </tr>
-          </thead>
+            <thead className="bg-gray-50">
+              <tr>
+                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Tên Nhiệm Vụ</th>
+                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Người phụ trách</th>
+                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Ưu tiên</th>
+                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Ngày bắt đầu</th>
+                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hạn chót</th>
+                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Tiến độ</th>
+                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hành động</th>
+              </tr>
+            </thead>
           <tbody>
             <tr onClick={() => setTableOpt({ ...tableOpt, todo: !tableOpt.todo })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.todo ? <CaretDownOutlined /> : <CaretRightOutlined />} Todo</td></tr>
             {todos.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
@@ -213,13 +211,13 @@ export default function ProjectDetail() {
       setFormData({ name: '', personChange: '', status: null, startDate: '', endDate: '', priority: null, progress: null })
       setErrorMol({ name: '', personChange: '', status: '', startDate: '', endDate: '', priority: '', progress: '' })
     }} onOk={async () => {
-      if (!validate()) return
+      if(!validate()) return
       const member = project!.members.find(m => m.username === formData.personChange)
-      if (!member) {
+      if(!member) {
         setErrorMol(prev => ({ ...prev, personChange: "Người phụ trách không hợp lệ" }))
         return
       }
-      if (optModal === 'add') {
+      if(optModal === 'add') {
         try {
           const newTodo: Omit<Todo, "id"> = {
             title: formData.name.trim(),
@@ -231,7 +229,7 @@ export default function ProjectDetail() {
             progress: formData.progress!,
           }
           const result = await dispatch(addTodo({ projectId: project!.id.toString(), newTodo }))
-          if (addTodo.rejected.match(result)) {
+          if(addTodo.rejected.match(result)) {
             setErrorMol(prev => ({ ...prev, name: result.payload as string }))
             return
           }
@@ -252,7 +250,7 @@ export default function ProjectDetail() {
             progress: formData.progress!,
           }
           const result = await dispatch(updateTodo({ projectId: project!.id.toString(), todoId: ID, updated }))
-          if (updateTodo.rejected.match(result)) {
+          if(updateTodo.rejected.match(result)) {
             setErrorMol(prev => ({ ...prev, name: result.payload as string }))
             return
           }
@@ -321,7 +319,7 @@ export default function ProjectDetail() {
     }} onOk={async () => {
       try {
         const result = await dispatch(deleteTodo({ projectId: project!.id.toString(), todoId: ID }))
-        if (deleteTodo.rejected.match(result)) return
+        if(deleteTodo.rejected.match(result)) return
         setConfirmDelete(false)
       } catch {
         console.log('Lỗi xoá nhiệm vụ')

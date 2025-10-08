@@ -93,16 +93,16 @@ export default function ProjectList() {
       setErrorMol({name: '', image: '', description: ''})
       setFormData({name: '', image: '', description: ''})
     }} onOk={async () => {
-      if (!validate()) return
-      if (optModal === "add") {
+      if(!validate()) return
+      if(optModal === "add") {
         try {
           const response = await dispatch(addProject(formData))
-          if (addProject.fulfilled.match(response)) {
+          if(addProject.fulfilled.match(response)) {
             setOpenModal(false)
             setFormData({ name: "", image: "", description: "" })
             setErrorMol({ name: "", image: "", description: "" })
             dispatch(fetchProject({ page: currPage, limit: 9, search }))
-          } else if (addProject.rejected.match(response)) {
+          } else if(addProject.rejected.match(response)) {
             const payload = response.payload as { name?: string; description?: string }
             setErrorMol({
               name: payload.name || "",
@@ -120,12 +120,12 @@ export default function ProjectList() {
             return
           }
           const response = await dispatch(updateProject({ id: ID, ...formData }))
-          if (updateProject.fulfilled.match(response)) {
+          if(updateProject.fulfilled.match(response)) {
             setOpenModal(false)
             setFormData({ name: "", image: "", description: "" })
             setErrorMol({ name: "", image: "", description: "" })
             dispatch(fetchProject({ page: currPage, limit: 9, search }))
-          } else if (updateProject.rejected.match(response)) {
+          } else if(updateProject.rejected.match(response)) {
             const payload = response.payload as { name?: string; description?: string }
             setErrorMol({name: payload.name || "", image: "", description: payload.description || ""})
           }
@@ -164,10 +164,10 @@ export default function ProjectList() {
         setConfirmDelete(false)
         setID(null)
       }} onOk={async () => {
-        if (ID === null) return
+        if(ID === null) return
         try {
           const response = await dispatch(deleteProject(ID))
-          if (deleteProject.fulfilled.match(response)) await dispatch(fetchProject({ page: currPage, limit: 9, search }))
+          if(deleteProject.fulfilled.match(response)) await dispatch(fetchProject({ page: currPage, limit: 9, search }))
           else console.error("Xóa thất bại:", response)
         } catch (error) {
           console.error("Lỗi xoá:", error)

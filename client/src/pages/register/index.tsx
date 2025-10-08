@@ -9,23 +9,19 @@ export default function Register() {
   const [isSubmit, setIsSubmit] = React.useState(false)
   const navigate = useNavigate()
 
+  const validate = (): boolean => {
+    const errors = { name: '', email: '', password: '', confirm_password: '' }
+    if(!formData.name) errors.name = 'Họ tên không được để trống'
+    if(!formData.email) errors.email = 'Email không được để trống'
+    if(!formData.password) errors.password = 'Mật khẩu không được để trống'
+    else if(formData.password.trim().length < 8) errors.password = 'Mật khẩu phải tối thiểu 8 ký tự'
+    if(formData.password !== formData.confirm_password) errors.confirm_password = 'Mật khẩu xác nhận không đúng'
+    setError(errors)
+    return !errors.name && !errors.email && !errors.password && !errors.confirm_password
+  }
+
   const handleRegister = async() => {
-    if(!formData.name) {
-      setError({ ...error, name: 'Họ và tên không được để trống' })
-      return
-    }
-    if(!formData.email) {
-      setError({ ...error, email: 'Email không được để trống' })
-      return
-    }
-    if(!formData.password) {
-      setError({ ...error, password: 'Mật khẩu không được để trống' })
-      return
-    }
-    if(formData.password !== formData.confirm_password) {
-      setError({ ...error, confirm_password: 'Xác nhận mật khẩu không đúng' })
-      return
-    }
+    if(!validate()) return
     try {
       const response = await axios.get<IUser[]>('http://localhost:3000/users')
       if(response.data) {

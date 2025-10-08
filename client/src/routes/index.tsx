@@ -1,5 +1,6 @@
 import LazyLoad from "@/components/LazyLoad";
 import MyTask from "@/pages/projectManager/MyTask";
+import NotFound from "@/pages/projectManager/NotFound";
 import ProductDetail from "@/pages/projectManager/ProjectDetail";
 import ProjectList from "@/pages/projectManager/ProjectList";
 import React from "react";
@@ -28,6 +29,10 @@ const routers = createBrowserRouter([
   {
     path: "mytask",
     element: <LazyLoad children={<MyTask/>}/>
+  },
+  {
+    path: "*",
+    element: <LazyLoad children={<NotFound/>}/>
   }
 ]);
 

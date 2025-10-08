@@ -14,31 +14,31 @@ export default function Login() {
   const [isSubmit, setIsSubmit] = React.useState<boolean>(false)
 
   React.useEffect(() => {
-    if (currentUser) navigate("/projects")
+    if(currentUser) navigate("/projects")
   }, [currentUser, navigate])
 
   const validate = (): boolean => {
     const errors = { email: "", password: "" }
 
-    if (!loginData.email.trim()) errors.email = "Email không được để trống"
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginData.email)) errors.email = "Email không đúng định dạng"
+    if(!loginData.email.trim()) errors.email = "Email không được để trống"
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginData.email)) errors.email = "Email không đúng định dạng"
 
-    if (!loginData.password.trim()) errors.password = "Mật khẩu không được để trống"
+    if(!loginData.password.trim()) errors.password = "Mật khẩu không được để trống"
     setFormError(errors)
     return !errors.email && !errors.password
   }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-    if (!validate()) return
+    if(!validate()) return
     try {
       await dispatch(login(loginData)).unwrap();
-      setIsSubmit(true);
+      setIsSubmit(true)
       setFormError({ email: "", password: "" })
       setTimeout(() => navigate("/projects"), 1200)
     } catch (rejected) {
       setIsSubmit(false)
-      if (rejected && typeof rejected === "object") setFormError(prev => ({ ...prev, ...(rejected) }))
+      if(rejected && typeof rejected === "object") setFormError(prev => ({ ...prev, ...(rejected) }))
     }
   }
 
@@ -65,7 +65,7 @@ export default function Login() {
           </div>
           <p className="text-green-500 text-sm">{isSubmit && "✓ Đăng nhập thành công!"}</p>
           <button type="submit" className="p-3 bg-blue-600 text-white rounded-md cursor-pointer">Đăng nhập</button>
-          <p className="text-center">Chưa có tài khoản? <NavLink to="/register">Đăng ký</NavLink></p>
+          <p className="text-center">Chưa có tài khoản? <NavLink className='font-semibold' to="/register">Đăng ký</NavLink></p>
         </form>
       </div>
     </div>

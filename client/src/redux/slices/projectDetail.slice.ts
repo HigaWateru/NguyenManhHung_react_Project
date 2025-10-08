@@ -114,6 +114,7 @@ const projectDetailSlice = createSlice({
             state.loading = false
             state.error = action.payload || 'Lỗi khi xoá thành viên'
         })
+
     }
 
 })

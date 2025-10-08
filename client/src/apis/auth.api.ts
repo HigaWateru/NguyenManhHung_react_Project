@@ -1,4 +1,4 @@
-import { type Todo, type IProject, type IUser, type IMember } from "@/utils/types";
+import { type Todo, type IProject, type IUser, type IMember, type MyTask } from "@/utils/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -125,16 +125,20 @@ export const updateProject = createAsyncThunk('project/update', async(payload: {
     }
 })
 
-export const fetchTodo = createAsyncThunk<IProject, number>('auth/fetchTodo', async (projectId) => {
+export const fetchTodo = createAsyncThunk<IProject, { projectId: number, search: string }>('auth/fetchTodo', async({ projectId, search }) => {
     const userID = localStorage.getItem('currentUser')
     if (!userID) throw new Error('No current user')
-    const response = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
-    const project = response.data.projects.find(project => project.id === projectId)
-    if (!project) throw new Error('Project not found')
-    return project
-})
 
-export const addTodo = createAsyncThunk<IProject, { projectId: string; newTodo: Omit<Todo, 'id'> }, { rejectValue: string }>('todo/addTodo', async({ projectId, newTodo }, { rejectWithValue }) => {
+    const response = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
+    const project = response.data.projects.find((p) => p.id === projectId)
+    if (!project) throw new Error('Project not found')
+
+    const filteredTodos = project.todos.filter(todo => todo.title.toLowerCase().includes(search.toLowerCase())) || []
+    return { ...project, todos: filteredTodos }
+  }
+)
+
+export const addTodo = createAsyncThunk<IProject, { projectId: string, newTodo: Omit<Todo, 'id'> }, { rejectValue: string }>('todo/addTodo', async({ projectId, newTodo }, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem('currentUser')
         if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
@@ -275,4 +279,43 @@ export const deleteMember = createAsyncThunk<IProject, { projectId: string; memb
         console.error('Error deleting member:', error)
         return rejectWithValue('Lỗi hệ thống khi xoá thành viên')
     }
+})
+
+export const fetchMyTask = createAsyncThunk<MyTask, {search: string}>('auth/fetchMyTask', async({ search }) => {
+    const userID = localStorage.getItem('currentUser')
+    if (!userID) throw new Error('No current user')
+    const [{ data: currentUser }, { data: allUsers }] = await Promise.all([
+        axios.get<IUser>(`http://localhost:3000/users/${userID}`),
+        axios.get<IUser[]>(`http://localhost:3000/users`)
+    ])
+
+    console.log(currentUser)
+    const term = (search || '').toLowerCase().trim()
+    const resultProjects: MyTask['projects'] = []
+
+    for (const user of allUsers) {
+        for (const project of user.projects) {
+            const assignedTodos = project.todos.filter(todo => {
+                const matchesAssignee = todo.personChange?.email?.toLowerCase().trim() === currentUser.email.toLowerCase().trim()
+                const matchesSearch = term ? todo.title.toLowerCase().includes(term) : true
+                return matchesAssignee && matchesSearch
+            })
+            if (assignedTodos.length > 0) {
+                resultProjects.push({
+                    id: project.id,
+                    name: project.name,
+                    tasks: assignedTodos.map(todo => ({
+                        id: todo.id,
+                        name: todo.title,
+                        priority: todo.priority,
+                        status: todo.status,
+                        startDate: todo.startDate,
+                        endDate: todo.endDate,
+                        progress: todo.progress
+                    }))
+                })
+            }
+        }
+    }
+    return { projects: resultProjects }
 })

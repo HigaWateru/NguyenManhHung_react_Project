@@ -19,22 +19,16 @@
               "role": "Frontend Developer"
             },
             {
-              "id": "m02",
-              "username": "Nguyễn Hoa",
-              "email": "nguyenhoa@example.com",
-              "role": "Backend Developer"
-            },
-            {
               "id": "m03",
               "username": "Phạm Tuấn",
               "email": "phamtuan@example.com",
               "role": "Tester"
             },
             {
-              "id": "uCzpqEC",
-              "username": "Higa_Wateru",
-              "email": "fc.canhcut1@gmail.com",
-              "role": "Fullstacker"
+              "id": "u001",
+              "username": "nguyenvana",
+              "email": "a@example.com",
+              "role": "Designer"
             }
           ],
           "todos": [
@@ -86,17 +80,17 @@
             {
               "id": "t04",
               "title": "Tối ưu SEO cho trang sản phẩm",
-              "priority": "medium",
               "personChange": {
-                "id": "m01",
-                "username": "Trần Minh",
-                "email": "tranminh@example.com",
-                "role": "Frontend Developer"
+                "id": "u001",
+                "username": "nguyenvana",
+                "email": "a@example.com",
+                "role": "Designer"
               },
-              "startDate": "2025-09-20",
-              "endDate": "2025-09-25",
-              "progress": "in-progress",
-              "status": "in-progress"
+              "status": "in-progress",
+              "startDate": "2025-10-29",
+              "endDate": "2025-11-06",
+              "priority": "medium",
+              "progress": "in-progress"
             },
             {
               "id": "t05",
@@ -138,6 +132,12 @@
               "username": "Higa_Wateru",
               "email": "fc.canhcut1@gmail.com",
               "role": "Developer"
+            },
+            {
+              "id": "u001",
+              "username": "nguyenvana",
+              "email": "a@example.com",
+              "role": "Designer"
             }
           ],
           "todos": [
@@ -205,14 +205,14 @@
               "id": "t1759825791598",
               "title": "Tạo giao diện câu hỏi",
               "personChange": {
-                "id": "m05",
-                "username": "Đỗ Huy",
-                "email": "dohuy@example.com",
-                "role": "Database Engineer"
+                "id": "u001",
+                "username": "nguyenvana",
+                "email": "a@example.com",
+                "role": "Designer"
               },
               "status": "pending",
-              "startDate": "2025-09-28",
-              "endDate": "2025-11-08",
+              "startDate": "2025-10-09",
+              "endDate": "2025-11-11",
               "priority": "medium",
               "progress": "in-progress"
             }
@@ -223,8 +223,79 @@
           "name": "Ứng dụng học ReactJS",
           "image": "https://cdn-media.sforum.vn/storage/app/media/HuynhUy/React%20l%C3%A0%20g%C3%ACH%C6%B0%E1%BB%9Bng%20d%E1%BA%ABn%20chi%20ti%E1%BA%BFt%20cho%20ng%C6%B0%E1%BB%9Di%20m%E1%BB%9Bi%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u/react-la-gi-thumb.jpg",
           "description": "Ứng dụng hướng đến những người muốn tìm hiểu về ReactJS ",
-          "todos": [],
-          "members": []
+          "todos": [
+            {
+              "id": "t1759887552687",
+              "title": "Giao diện trang đăng nhập",
+              "personChange": {
+                "id": "uCzpqEC",
+                "username": "Higa_Wateru",
+                "email": "fc.canhcut1@gmail.com",
+                "role": "Front-end developer"
+              },
+              "status": "in-progress",
+              "startDate": "2025-10-09",
+              "endDate": "2025-11-01",
+              "priority": "high",
+              "progress": "scheduled"
+            },
+            {
+              "id": "t1759887608748",
+              "title": "Giao diện trang đăng kí",
+              "personChange": {
+                "id": "HOLydZn",
+                "username": "Sỹ Trung",
+                "email": "sytrung@gmail.com",
+                "role": "Back-end developer"
+              },
+              "status": "to-do",
+              "startDate": "2025-10-09",
+              "endDate": "2025-11-07",
+              "priority": "low",
+              "progress": "in-progress"
+            },
+            {
+              "id": "t1759887661165",
+              "title": "Ứng dụng cloudinary",
+              "personChange": {
+                "id": "HOLydZn",
+                "username": "Sỹ Trung",
+                "email": "sytrung@gmail.com",
+                "role": "Back-end developer"
+              },
+              "status": "pending",
+              "startDate": "2025-10-12",
+              "endDate": "2025-11-06",
+              "priority": "high",
+              "progress": "delayed"
+            }
+          ],
+          "members": [
+            {
+              "id": "jRWolsX",
+              "username": "Cường Nguyễn",
+              "email": "manhcuong@gmail.com",
+              "role": "Designer"
+            },
+            {
+              "id": "uCzpqEC",
+              "username": "Higa_Wateru",
+              "email": "fc.canhcut1@gmail.com",
+              "role": "Front-end developer"
+            },
+            {
+              "id": "HOLydZn",
+              "username": "Sỹ Trung",
+              "email": "sytrung@gmail.com",
+              "role": "Back-end developer"
+            },
+            {
+              "id": "u001",
+              "username": "nguyenvana",
+              "email": "a@example.com",
+              "role": "Database Manager"
+            }
+          ]
         },
         {
           "id": 4,
@@ -297,6 +368,27 @@
       "password": "12345678",
       "projects": [],
       "id": "2-sPOfo"
+    },
+    {
+      "name": "Sỹ Trung",
+      "email": "sytrung@gmail.com",
+      "password": "123456",
+      "projects": [],
+      "id": "HOLydZn"
+    },
+    {
+      "name": "Cường Nguyễn",
+      "email": "manhcuong@gmail.com",
+      "password": "abcdefgh",
+      "projects": [],
+      "id": "jRWolsX"
+    },
+    {
+      "name": "Thắng Nguyễn",
+      "email": "thangnguyen@gmail.com",
+      "password": "12345678",
+      "projects": [],
+      "id": "83d_3cx"
     }
   ]
 }
