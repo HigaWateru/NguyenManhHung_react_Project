@@ -17,7 +17,8 @@ export default function ProjectDetail() {
   const dispatch = useDispatch<AppDispatch>()
   const { id } = useParams<{ id: string }>()
 
-  const [tableOpt, setTableOpt] = React.useState<{ todo: boolean, inProgress: boolean, pending: boolean, done: boolean }>({ todo: true, inProgress: true, pending: false, done: false })
+  const [tableOpt, setTableOpt] = React.useState<{ todo: boolean, inProgress: boolean, pending: boolean, done: boolean }>
+    ({ todo: true, inProgress: true, pending: false, done: false })
   const [formData, setFormData] = React.useState<{
     name: string,
     personChange: string,
@@ -36,25 +37,38 @@ export default function ProjectDetail() {
 
   const validate = (): boolean => {
     const errors = { name: '', personChange: '', status: '', startDate: '', endDate: '', priority: '', progress: '' }
-    if(!formData.name.trim()) errors.name = 'Tên nhiệm vụ không được để trống'
-    if(!formData.personChange) errors.personChange = 'Vui lòng chọn người phụ trách'
-    if(!formData.status) errors.status = 'Vui lòng chọn status nhiệm vụ'
-    if(!formData.startDate) errors.startDate = 'Vui lòng chọn ngày bắt đầu'
-    else if(new Date() > new Date(formData.startDate)) errors.startDate = 'Ngày bắt đầu phải lớn hơn thời gian hiện tại'
-    if(!formData.endDate) errors.endDate = 'Vui lòng chọn thời gian hạn chót'
-    else if(new Date(formData.endDate) < new Date(formData.startDate)) errors.endDate = 'Hạn chót không hợp lệ'
-    if(!formData.priority) errors.priority = 'Vui lòng chọn độ ưu tiên'
-    if(!formData.progress) errors.progress = 'Vui lòng chọn tiến độ'
+    if (!formData.name.trim()) errors.name = 'Tên nhiệm vụ không được để trống'
+    if (!formData.personChange) errors.personChange = 'Vui lòng chọn người phụ trách'
+    if (!formData.status) errors.status = 'Vui lòng chọn status nhiệm vụ'
+    if (!formData.startDate) errors.startDate = 'Vui lòng chọn ngày bắt đầu'
+    else if (new Date() > new Date(formData.startDate)) errors.startDate = 'Ngày bắt đầu phải lớn hơn thời gian hiện tại'
+    if (!formData.endDate) errors.endDate = 'Vui lòng chọn thời gian hạn chót'
+    else if (new Date(formData.endDate) < new Date(formData.startDate)) errors.endDate = 'Hạn chót không hợp lệ'
+    if (!formData.priority) errors.priority = 'Vui lòng chọn độ ưu tiên'
+    if (!formData.progress) errors.progress = 'Vui lòng chọn tiến độ'
     setErrorMol(errors)
-
     return !errors.name && !errors.personChange && !errors.status && !errors.startDate && !errors.endDate && !errors.priority && !errors.progress
   }
 
 
   const [ID, setID] = React.useState<string>('')
+  const [sort, setSort] = React.useState<'endDate' | 'priority' | null>(null)
+  const handleSort = (tasks: Todo[]) => {
+    if (!sort) return tasks
+    const sortedTask = [...tasks]
+    if (sort === 'endDate') sortedTask.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime())
+    if (sort === 'priority') {
+      const order = { high: 1, medium: 2, low: 3 }
+      sortedTask.sort((a, b) => order[a.priority] - order[b.priority])
+    }
+    return sortedTask
+  }
+
+  console.log(handleSort(todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase()))))
+
 
   React.useEffect(() => {
-    const timeout = setTimeout(() => dispatch(fetchTodo({projectId: Number(id), search})), 200)
+    const timeout = setTimeout(() => dispatch(fetchTodo({ projectId: Number(id), search })), 200)
     return () => clearTimeout(timeout)
   }, [dispatch, id, search])
 
@@ -69,31 +83,31 @@ export default function ProjectDetail() {
             setOpenModal(true)
           }} className="bg-[#007bff] text-white px-3 py-1 rounded-md cursor-pointer">+ Thêm nhiệm vụ</button>
           <div className="flex gap-4">
-            <Select style={{ width: 200, height: 40 }} placeholder="Sắp xếp theo" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
-              { value: 'todo', label: 'Hạn chót' },
-              { value: 'inprogress', label: 'Độ ưu tiên' }
-            ]} />
-            <input value={search} onChange={e => setSearch(e.target.value)} className="border border-gray-300 rounded-md px-3 py-1 outline-none w-[300px]" type="text" placeholder="Tìm kiếm nhiệm vụ" />
+            <Select value={sort} style={{ width: 200, height: 40 }} placeholder="Sắp xếp theo" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+              { value: 'endDate', label: 'Hạn chót' },
+              { value: 'priority', label: 'Độ ưu tiên' }
+            ]} onChange={value => setSort(value as 'endDate' | 'priority')} />
+            <input value={search} onChange={event => setSearch(event.target.value)} className="border border-gray-300 rounded-md px-3 py-1 outline-none w-[300px]" type="text" placeholder="Tìm kiếm nhiệm vụ" />
           </div>
         </div>
       </div>
       <div className="border w-[1200px] border-gray-100 rounded-md p-6 flex flex-col gap-6 shadow-xl text-[16px]">
         <h2 className="text-xl font-semibold">Danh sách nhiệm vụ</h2>
         <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Tên Nhiệm Vụ</th>
-                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Người phụ trách</th>
-                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Ưu tiên</th>
-                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Ngày bắt đầu</th>
-                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hạn chót</th>
-                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Tiến độ</th>
-                <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hành động</th>
-              </tr>
-            </thead>
+          <thead className="bg-gray-50">
+            <tr>
+              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Tên Nhiệm Vụ</th>
+              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Người phụ trách</th>
+              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Ưu tiên</th>
+              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Ngày bắt đầu</th>
+              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hạn chót</th>
+              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Tiến độ</th>
+              <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hành động</th>
+            </tr>
+          </thead>
           <tbody>
             <tr onClick={() => setTableOpt({ ...tableOpt, todo: !tableOpt.todo })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.todo ? <CaretDownOutlined /> : <CaretRightOutlined />} Todo ({todos.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
-            {todos.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+            {handleSort(todos.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase()))).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.todo ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
@@ -120,7 +134,7 @@ export default function ProjectDetail() {
               </tr>
             ))}
             <tr onClick={() => setTableOpt({ ...tableOpt, inProgress: !tableOpt.inProgress })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.inProgress ? <CaretDownOutlined /> : <CaretRightOutlined />} In Progress ({todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
-            {todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+            {handleSort(todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase()))).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.inProgress ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
@@ -147,7 +161,7 @@ export default function ProjectDetail() {
               </tr>
             ))}
             <tr onClick={() => setTableOpt({ ...tableOpt, pending: !tableOpt.pending })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.pending ? <CaretDownOutlined /> : <CaretRightOutlined />} Pending ({todos.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
-            {todos.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+            {handleSort(todos.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase()))).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.pending ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
@@ -174,7 +188,7 @@ export default function ProjectDetail() {
               </tr>
             ))}
             <tr onClick={() => setTableOpt({ ...tableOpt, done: !tableOpt.done })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.done ? <CaretDownOutlined /> : <CaretRightOutlined />} Done ({todos.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
-            {todos.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase())).map((todo: Todo) => (
+            {handleSort(todos.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase()))).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.done ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
                 <td className="text-center border border-gray-300">{todo.personChange.username}</td>
@@ -210,14 +224,14 @@ export default function ProjectDetail() {
       setOpenModal(false)
       setFormData({ name: '', personChange: '', status: null, startDate: '', endDate: '', priority: null, progress: null })
       setErrorMol({ name: '', personChange: '', status: '', startDate: '', endDate: '', priority: '', progress: '' })
-    }} onOk={ async() => {
-      if(!validate()) return
+    }} onOk={async () => {
+      if (!validate()) return
       const member = project!.members.find(member => member.username === formData.personChange)
-      if(!member) {
+      if (!member) {
         setErrorMol(prev => ({ ...prev, personChange: "Người phụ trách không hợp lệ" }))
         return
       }
-      if(optModal === 'add') {
+      if (optModal === 'add') {
         try {
           const newTodo: Omit<Todo, "id"> = {
             title: formData.name.trim(),
@@ -229,7 +243,7 @@ export default function ProjectDetail() {
             progress: formData.progress!,
           }
           const result = await dispatch(addTodo({ projectId: project!.id.toString(), newTodo }))
-          if(addTodo.rejected.match(result)) {
+          if (addTodo.rejected.match(result)) {
             setErrorMol(prev => ({ ...prev, name: result.payload as string }))
             return
           }
@@ -250,7 +264,7 @@ export default function ProjectDetail() {
             progress: formData.progress!,
           }
           const result = await dispatch(updateTodo({ projectId: project!.id.toString(), todoId: ID, updated }))
-          if(updateTodo.rejected.match(result)) {
+          if (updateTodo.rejected.match(result)) {
             setErrorMol(prev => ({ ...prev, name: result.payload as string }))
             return
           }
@@ -264,8 +278,8 @@ export default function ProjectDetail() {
       <div className="flex flex-col gap-2">
         <label className="font-medium">Tên nhiệm vụ</label>
         <input onChange={event => {
-          setErrorMol({...errorMol, name: ''})
-          setFormData({...formData, name: event.target.value})
+          setErrorMol({ ...errorMol, name: '' })
+          setFormData({ ...formData, name: event.target.value })
         }} value={formData.name} type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
         <p className="text-red-500 text-sm">{errorMol.name}</p>
       </div>
@@ -276,8 +290,8 @@ export default function ProjectDetail() {
             value: member.username, label: member.username
           }))
         } onChange={value => {
-          setErrorMol({...errorMol, personChange: ''})
-          setFormData({...formData, personChange: value})
+          setErrorMol({ ...errorMol, personChange: '' })
+          setFormData({ ...formData, personChange: value })
         }} />
         <p className="text-red-500 text-sm">{errorMol.personChange}</p>
       </div>
@@ -289,24 +303,24 @@ export default function ProjectDetail() {
           { value: 'pending', label: 'Pending' },
           { value: 'done', label: 'Done' }
         ]} onChange={value => {
-          setErrorMol({...errorMol, status: ''})
-          setFormData({...formData, status: value})
+          setErrorMol({ ...errorMol, status: '' })
+          setFormData({ ...formData, status: value })
         }} />
         <p className="text-red-500 text-sm">{errorMol.status}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Ngày bắt đầu</label>
         <input onChange={event => {
-          setErrorMol({...errorMol, startDate: ''})
-          setFormData({...formData, startDate: event.target.value})
+          setErrorMol({ ...errorMol, startDate: '' })
+          setFormData({ ...formData, startDate: event.target.value })
         }} value={formData.startDate} type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
         <p className="text-red-500 text-sm">{errorMol.startDate}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Ngày kết thúc</label>
         <input onChange={event => {
-          setErrorMol({...errorMol, endDate: ''})
-          setFormData({...formData, endDate: event.target.value})
+          setErrorMol({ ...errorMol, endDate: '' })
+          setFormData({ ...formData, endDate: event.target.value })
         }} value={formData.endDate} type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
         <p className="text-red-500 text-sm">{errorMol.endDate}</p>
       </div>
@@ -317,8 +331,8 @@ export default function ProjectDetail() {
           { value: 'medium', label: 'Trung bình' },
           { value: 'high', label: 'Cao' }
         ]} onChange={value => {
-          setErrorMol({...errorMol, priority: ''})
-          setFormData({...formData, priority: value})
+          setErrorMol({ ...errorMol, priority: '' })
+          setFormData({ ...formData, priority: value })
         }} />
         <p className="text-red-500 text-sm">{errorMol.priority}</p>
       </div>
@@ -329,8 +343,8 @@ export default function ProjectDetail() {
           { value: 'in-progress', label: 'Có rủi ro' },
           { value: 'delayed', label: 'Trễ hạn' }
         ]} onChange={value => {
-          setErrorMol({...errorMol, progress: ''})
-          setFormData({...formData, progress: value})
+          setErrorMol({ ...errorMol, progress: '' })
+          setFormData({ ...formData, progress: value })
         }} />
         <p className="text-red-500 text-sm">{errorMol.progress}</p>
       </div>
@@ -340,7 +354,7 @@ export default function ProjectDetail() {
     }} onOk={async () => {
       try {
         const result = await dispatch(deleteTodo({ projectId: project!.id.toString(), todoId: ID }))
-        if(deleteTodo.rejected.match(result)) return
+        if (deleteTodo.rejected.match(result)) return
         setConfirmDelete(false)
       } catch {
         console.log('Lỗi xoá nhiệm vụ')

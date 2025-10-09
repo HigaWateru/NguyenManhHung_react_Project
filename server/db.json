@@ -35,17 +35,17 @@
             {
               "id": "t01",
               "title": "Thiết kế giao diện trang chủ",
-              "priority": "high",
               "personChange": {
                 "id": "m01",
                 "username": "Trần Minh",
                 "email": "tranminh@example.com",
                 "role": "Frontend Developer"
               },
-              "startDate": "2025-09-10",
-              "endDate": "2025-09-15",
-              "progress": "in-progress",
-              "status": "in-progress"
+              "status": "in-progress",
+              "startDate": "2025-10-10",
+              "endDate": "2025-10-11",
+              "priority": "low",
+              "progress": "delayed"
             },
             {
               "id": "t02",
@@ -89,23 +89,23 @@
               "status": "in-progress",
               "startDate": "2025-10-29",
               "endDate": "2025-11-06",
-              "priority": "low",
+              "priority": "high",
               "progress": "in-progress"
             },
             {
               "id": "t05",
               "title": "Triển khai website lên hosting",
-              "priority": "high",
               "personChange": {
-                "id": "m02",
-                "username": "Nguyễn Hoa",
-                "email": "nguyenhoa@example.com",
-                "role": "Backend Developer"
+                "id": "m03",
+                "username": "Phạm Tuấn",
+                "email": "phamtuan@example.com",
+                "role": "Tester"
               },
-              "startDate": "2025-09-26",
-              "endDate": "2025-09-30",
-              "progress": "scheduled",
-              "status": "pending"
+              "status": "pending",
+              "startDate": "2025-10-11",
+              "endDate": "2025-10-31",
+              "priority": "high",
+              "progress": "scheduled"
             }
           ]
         },
