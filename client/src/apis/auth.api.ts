@@ -1,16 +1,16 @@
-import { type Todo, type IProject, type IUser, type IMember, type MyTask } from "@/utils/types";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { type Todo, type IProject, type IUser, type IMember, type MyTask } from "@/utils/types"
+import { createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
 
 interface LoginPayload {
-    email: string;
-    password: string;
+    email: string
+    password: string
 }
 
 interface RegisterPayload {
-    name: string;
-    email: string;
-    password: string;
+    name: string
+    email: string
+    password: string
 }
 
 export const fetchData = createAsyncThunk<IUser[]>('auth/fetchData', async () => {
@@ -22,8 +22,8 @@ export const login = createAsyncThunk<IUser, LoginPayload, { rejectValue: {email
     try {
         const response = await axios.get<IUser[]>("http://localhost:3000/users")
         const foundUser = response.data.find((user) => user.email === payload.email)
-        if (!foundUser) return rejectWithValue({email: "Email không tồn tại", password: ''})
-        if (foundUser.password !== payload.password) return rejectWithValue({email: '', password: 'Mật khẩu không đúng'})
+        if(!foundUser) return rejectWithValue({email: "Email không tồn tại", password: ''})
+        if(foundUser.password !== payload.password) return rejectWithValue({email: '', password: 'Mật khẩu không đúng'})
         localStorage.setItem("currentUser", foundUser.id)
         return foundUser
     } catch {
@@ -34,7 +34,7 @@ export const register = createAsyncThunk<IUser, RegisterPayload, { rejectValue: 
     try {
         const response = await axios.get<IUser[]>("http://localhost:3000/users")
         const exists = response.data.find((user) => user.email === payload.email)
-        if (exists) return rejectWithValue({email: "Email đã tồn tại", password: ''})
+        if(exists) return rejectWithValue({email: "Email đã tồn tại", password: ''})
 
         const newUser: IUser = {
             id: String(Date.now()),
@@ -53,7 +53,7 @@ export const register = createAsyncThunk<IUser, RegisterPayload, { rejectValue: 
 
 export const fetchProject = createAsyncThunk<{data: IProject[], total: number}, {page: number, limit: number, search: string}>('auth/fetchProject', async ({page, limit, search}) => {
     const userID = localStorage.getItem('currentUser')
-    if (!userID) return {data: [], total: 0}
+    if(!userID) return {data: [], total: 0}
     const response = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
     const projectData = response.data.projects
 
@@ -65,10 +65,10 @@ export const fetchProject = createAsyncThunk<{data: IProject[], total: number}, 
     return {data: paginatedProject, total: filtered.length}
 })
 
-export const addProject = createAsyncThunk<IProject, { name: string; image: string; description: string }, { rejectValue: {name: string, description: string} }>("project/add", async(payload, { rejectWithValue }) => {
+export const addProject = createAsyncThunk<IProject, { name: string, image: string, description: string }, { rejectValue: {name: string, description: string} }>("project/add", async(payload, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem("currentUser")
-        if (!userID) return rejectWithValue({name: 'Không tìm thấy người dùng hiện tại', description: ''})
+        if(!userID) return rejectWithValue({name: 'Không tìm thấy người dùng hiện tại', description: ''})
         const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
         const exitst = userData.projects.some(project => project.name.toLowerCase().trim() === payload.name.toLowerCase())
         if(exitst) return rejectWithValue({name: 'Tên dự án đã tồn tại', description: ''})
@@ -100,7 +100,7 @@ export const uploadImg = async(file: File): Promise<string> => {
 export const deleteProject = createAsyncThunk("project/delete",async (id: number, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem("currentUser")
-        if (!userID) return rejectWithValue("Không tìm thấy người dùng hiện tại")
+        if(!userID) return rejectWithValue("Không tìm thấy người dùng hiện tại")
         const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
         const updatedProjects = userData.projects.filter((project) => project.id !== id)
         await axios.put(`http://localhost:3000/users/${userID}`, {...userData, projects: updatedProjects})
@@ -113,7 +113,7 @@ export const deleteProject = createAsyncThunk("project/delete",async (id: number
 export const updateProject = createAsyncThunk('project/update', async(payload: {id: number, name: string, image: string, description: string}, {rejectWithValue}) => {
     try {
         const userID = localStorage.getItem("currentUser")
-        if (!userID) return rejectWithValue({name: 'Không tìm thấy người dùng hiện tại', description: ''})
+        if(!userID) return rejectWithValue({name: 'Không tìm thấy người dùng hiện tại', description: ''})
         const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
         const duplicated = userData.projects.find(project => project.name.toLocaleLowerCase() === payload.name.toLocaleLowerCase() && project.id !== payload.id)
         if(duplicated) return rejectWithValue({name: 'Tên dự án đã tồn tại', description: ''})
@@ -127,11 +127,11 @@ export const updateProject = createAsyncThunk('project/update', async(payload: {
 
 export const fetchTodo = createAsyncThunk<IProject, { projectId: number, search: string }>('auth/fetchTodo', async({ projectId, search }) => {
     const userID = localStorage.getItem('currentUser')
-    if (!userID) throw new Error('No current user')
+    if(!userID) throw new Error('No current user')
 
     const response = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
     const project = response.data.projects.find((p) => p.id === projectId)
-    if (!project) throw new Error('Project not found')
+    if(!project) throw new Error('Project not found')
 
     const filteredTodos = project.todos.filter(todo => todo.title.toLowerCase().includes(search.toLowerCase())) || []
     return { ...project, todos: filteredTodos }
@@ -141,13 +141,13 @@ export const fetchTodo = createAsyncThunk<IProject, { projectId: number, search:
 export const addTodo = createAsyncThunk<IProject, { projectId: string, newTodo: Omit<Todo, 'id'> }, { rejectValue: string }>('todo/addTodo', async({ projectId, newTodo }, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem('currentUser')
-        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        if(!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
         const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
         const projectIndex = userData.projects.findIndex(project => project.id === Number(projectId))
-        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        if(projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
         const project = userData.projects[projectIndex]
         const isDuplicateTitle = project.todos.some(todo => todo.title.trim().toLowerCase() === newTodo.title.trim().toLowerCase())
-        if (isDuplicateTitle) return rejectWithValue('Tên nhiệm vụ không được trùng')
+        if(isDuplicateTitle) return rejectWithValue('Tên nhiệm vụ không được trùng')
         const todoWithId: Todo = {id: `t${Date.now()}`,...newTodo}
         const updatedProject: IProject = {...project,todos: [...project.todos, todoWithId]}
         const updatedUser: IUser = {...userData, projects: userData.projects.map(project => project.id === updatedProject.id ? updatedProject : project)}
@@ -159,17 +159,17 @@ export const addTodo = createAsyncThunk<IProject, { projectId: string, newTodo: 
     }
 })
 
-export const updateTodo = createAsyncThunk<IProject, { projectId: string; todoId: string; updated: Omit<Todo, 'id'> }, { rejectValue: string }>('todo/updateTodo', async({ projectId, todoId, updated }, { rejectWithValue }) => {
+export const updateTodo = createAsyncThunk<IProject, { projectId: string, todoId: string, updated: Omit<Todo, 'id'> }, { rejectValue: string }>('todo/updateTodo', async({ projectId, todoId, updated }, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem('currentUser')
-        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        if(!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
         const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
         const projectIndex = userData.projects.findIndex(project => project.id === Number(projectId))
-        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        if(projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
         const project = userData.projects[projectIndex]
 
         const exists = project.todos.some(todo => todo.id !== todoId && todo.title.trim().toLowerCase() === updated.title.trim().toLowerCase())
-        if (exists) return rejectWithValue('Tên nhiệm vụ không được trùng')
+        if(exists) return rejectWithValue('Tên nhiệm vụ không được trùng')
 
         const updatedTodos = project.todos.map(todo => todo.id === todoId ? { id: todoId, ...updated } : todo)
         const updatedProject: IProject = { ...project, todos: updatedTodos }
@@ -182,14 +182,14 @@ export const updateTodo = createAsyncThunk<IProject, { projectId: string; todoId
     }
 })
 
-export const deleteTodo = createAsyncThunk<IProject, { projectId: string; todoId: string }, { rejectValue: string }>('todo/deleteTodo', async({ projectId, todoId }, { rejectWithValue }) => {
+export const deleteTodo = createAsyncThunk<IProject, { projectId: string, todoId: string }, { rejectValue: string }>('todo/deleteTodo', async({ projectId, todoId }, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem('currentUser')
-        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        if(!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
         const { data: userData } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
 
         const projectIndex = userData.projects.findIndex(project => project.id === Number(projectId))
-        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        if(projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
         const project = userData.projects[projectIndex]
 
         const updatedTodos = project.todos.filter(todo => todo.id !== todoId)
@@ -203,22 +203,22 @@ export const deleteTodo = createAsyncThunk<IProject, { projectId: string; todoId
     }
 })
 
-export const addMember = createAsyncThunk<IProject, { projectId: string; email: string; role: string }, { rejectValue: string }>('member/addMember', async({ projectId, email, role }, { rejectWithValue }) => {
+export const addMember = createAsyncThunk<IProject, { projectId: string, email: string, role: string }, { rejectValue: string }>('member/addMember', async({ projectId, email, role }, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem('currentUser')
-        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        if(!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
         const [{ data: currentUser }, { data: allUsers }] = await Promise.all([
             axios.get<IUser>(`http://localhost:3000/users/${userID}`),
             axios.get<IUser[]>(`http://localhost:3000/users`),
         ])
 
         const projectIndex = currentUser.projects.findIndex(project => project.id === Number(projectId))
-        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        if(projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
         const userToAdd = allUsers.find(user => user.email.trim().toLowerCase() === email.trim().toLowerCase())
-        if (!userToAdd) return rejectWithValue('Email không tồn tại trong hệ thống')
+        if(!userToAdd) return rejectWithValue('Email không tồn tại trong hệ thống')
         const project = currentUser.projects[projectIndex]
         const exists = project.members.some(member => member.id === userToAdd.id)
-        if (exists) return rejectWithValue('Thành viên đã tồn tại trong dự án')
+        if(exists) return rejectWithValue('Thành viên đã tồn tại trong dự án')
         const rawName: string | undefined = (userToAdd as unknown as { name?: string }).name
         const baseUsername = userToAdd.username || rawName || userToAdd.email.split('@')[0]
         const composedUsername = userToAdd.username && rawName && userToAdd.username !== rawName ? `${userToAdd.username} (${rawName})` : baseUsername
@@ -239,14 +239,14 @@ export const addMember = createAsyncThunk<IProject, { projectId: string; email: 
     }
 })
 
-export const updateMember = createAsyncThunk<IProject, { projectId: string; memberId: string; role: string }, { rejectValue: string }>('member/updateMember', async({ projectId, memberId, role }, { rejectWithValue }) => {
+export const updateMember = createAsyncThunk<IProject, { projectId: string, memberId: string, role: string }, { rejectValue: string }>('member/updateMember', async({ projectId, memberId, role }, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem('currentUser')
-        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        if(!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
         const { data: currentUser } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
 
         const projectIndex = currentUser.projects.findIndex(project => project.id === Number(projectId))
-        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        if(projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
         const project = currentUser.projects[projectIndex]
 
         const updatedMembers = project.members.map(member => (member.id === memberId ? {...member, role} : member))
@@ -260,14 +260,14 @@ export const updateMember = createAsyncThunk<IProject, { projectId: string; memb
     }
 })
 
-export const deleteMember = createAsyncThunk<IProject, { projectId: string; memberId: string }, { rejectValue: string }>('member/deleteMember', async({ projectId, memberId }, { rejectWithValue }) => {
+export const deleteMember = createAsyncThunk<IProject, { projectId: string, memberId: string }, { rejectValue: string }>('member/deleteMember', async({ projectId, memberId }, { rejectWithValue }) => {
     try {
         const userID = localStorage.getItem('currentUser')
-        if (!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
+        if(!userID) return rejectWithValue('Không tìm thấy người dùng hiện tại')
         const { data: currentUser } = await axios.get<IUser>(`http://localhost:3000/users/${userID}`)
 
         const projectIndex = currentUser.projects.findIndex((p) => p.id === Number(projectId))
-        if (projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
+        if(projectIndex === -1) return rejectWithValue('Không tìm thấy dự án')
         const project = currentUser.projects[projectIndex]
 
         const updatedMembers = project.members.filter(member => member.id !== memberId)
@@ -283,39 +283,47 @@ export const deleteMember = createAsyncThunk<IProject, { projectId: string; memb
 
 export const fetchMyTask = createAsyncThunk<MyTask, {search: string}>('auth/fetchMyTask', async({ search }) => {
     const userID = localStorage.getItem('currentUser')
-    if (!userID) throw new Error('No current user')
+    if(!userID) throw new Error('No current user')
     const [{ data: currentUser }, { data: allUsers }] = await Promise.all([
         axios.get<IUser>(`http://localhost:3000/users/${userID}`),
         axios.get<IUser[]>(`http://localhost:3000/users`)
     ])
 
-    console.log(currentUser)
     const term = (search || '').toLowerCase().trim()
     const resultProjects: MyTask['projects'] = []
 
-    for (const user of allUsers) {
-        for (const project of user.projects) {
-            const assignedTodos = project.todos.filter(todo => {
-                const matchesAssignee = todo.personChange?.email?.toLowerCase().trim() === currentUser.email.toLowerCase().trim()
-                const matchesSearch = term ? todo.title.toLowerCase().includes(term) : true
-                return matchesAssignee && matchesSearch
-            })
-            if (assignedTodos.length > 0) {
-                resultProjects.push({
-                    id: project.id,
-                    name: project.name,
-                    tasks: assignedTodos.map(todo => ({
-                        id: todo.id,
-                        name: todo.title,
-                        priority: todo.priority,
-                        status: todo.status,
-                        startDate: todo.startDate,
-                        endDate: todo.endDate,
-                        progress: todo.progress
-                    }))
-                })
-            }
-        }
+    for(const user of allUsers) for(const project of user.projects) {
+        const assignedTodos = project.todos.filter(todo => {
+            const matchesAssignee = todo.personChange?.email?.toLowerCase().trim() === currentUser.email.toLowerCase().trim()
+            const matchesSearch = term ? todo.title.toLowerCase().includes(term) : true
+            return matchesAssignee && matchesSearch
+        })
+        if(assignedTodos.length > 0) resultProjects.push({
+            id: project.id,
+            name: project.name,
+            tasks: assignedTodos.map(todo => ({
+                id: todo.id,
+                name: todo.title,
+                priority: todo.priority,
+                status: todo.status,
+                startDate: todo.startDate,
+                endDate: todo.endDate,
+                progress: todo.progress
+            }))
+        })    
     }
     return { projects: resultProjects }
+})
+
+export const changeStatus = createAsyncThunk<IUser[], {taskID: string}>('auth/changeStatus', async({ taskID }) => {
+    const response = await axios.get<IUser[]>("http://localhost:3000/users")
+    for(const user of response.data) for(const project of user.projects) {
+        const foundTask = project.todos.find(todo => todo.id === taskID)
+        if(foundTask) {
+            if(foundTask.status === 'in-progress') foundTask.status = 'pending'
+            else if(foundTask.status === 'pending') foundTask.status = 'in-progress'
+        }
+            await axios.put(`http://localhost:3000/users/${user.id}`, user)
+    }
+    return response.data
 })

@@ -1,14 +1,14 @@
-import { addTodo, deleteTodo, fetchTodo, updateTodo } from "@/apis/auth.api";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import ProjectIntroduce from "@/components/ProjectIntroduce";
-import type { AppDispatch, RootState } from "@/redux/store";
-import type { IMember, Todo } from "@/utils/types";
-import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
-import { Modal, Select } from "antd";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { addTodo, deleteTodo, fetchTodo, updateTodo } from "@/apis/auth.api"
+import Footer from "@/components/Footer"
+import Header from "@/components/Header"
+import ProjectIntroduce from "@/components/ProjectIntroduce"
+import type { AppDispatch, RootState } from "@/redux/store"
+import type { IMember, Todo } from "@/utils/types"
+import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons"
+import { Modal, Select } from "antd"
+import React from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
 
 export default function ProjectDetail() {
   const [search, setSearch] = React.useState('')
@@ -210,9 +210,9 @@ export default function ProjectDetail() {
       setOpenModal(false)
       setFormData({ name: '', personChange: '', status: null, startDate: '', endDate: '', priority: null, progress: null })
       setErrorMol({ name: '', personChange: '', status: '', startDate: '', endDate: '', priority: '', progress: '' })
-    }} onOk={async () => {
+    }} onOk={ async() => {
       if(!validate()) return
-      const member = project!.members.find(m => m.username === formData.personChange)
+      const member = project!.members.find(member => member.username === formData.personChange)
       if(!member) {
         setErrorMol(prev => ({ ...prev, personChange: "Người phụ trách không hợp lệ" }))
         return
@@ -327,5 +327,5 @@ export default function ProjectDetail() {
     }} okText='Xoá' okType="danger">
       <p>Bạn có chắc chắn xoá nhiệm vụ <span className="font-medium">{todos.find(todo => todo.id === ID)?.title || 'Not found'}</span></p>
     </Modal>
-  </div>;
+  </div>
 }

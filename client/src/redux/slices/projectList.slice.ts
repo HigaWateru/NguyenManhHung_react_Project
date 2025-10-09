@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { addProject, deleteProject, fetchProject, updateProject } from "@/apis/auth.api";
-import type { IProject } from "@/utils/types";
+import { createSlice } from "@reduxjs/toolkit"
+import { addProject, deleteProject, fetchProject, updateProject } from "@/apis/auth.api"
+import type { IProject } from "@/utils/types"
 
 interface ProjectState {
     list: IProject[]

@@ -50,17 +50,17 @@
             {
               "id": "t02",
               "title": "Tạo API sản phẩm",
-              "priority": "medium",
               "personChange": {
-                "id": "m02",
-                "username": "Nguyễn Hoa",
-                "email": "nguyenhoa@example.com",
-                "role": "Backend Developer"
+                "id": "u001",
+                "username": "nguyenvana",
+                "email": "a@example.com",
+                "role": "Designer"
               },
-              "startDate": "2025-09-12",
-              "endDate": "2025-09-18",
-              "progress": "scheduled",
-              "status": "pending"
+              "status": "pending",
+              "startDate": "2025-10-10",
+              "endDate": "2025-10-21",
+              "priority": "medium",
+              "progress": "scheduled"
             },
             {
               "id": "t03",
@@ -89,7 +89,7 @@
               "status": "in-progress",
               "startDate": "2025-10-29",
               "endDate": "2025-11-06",
-              "priority": "medium",
+              "priority": "low",
               "progress": "in-progress"
             },
             {
@@ -302,8 +302,31 @@
           "name": "Dự án 1",
           "image": "https://media.vneconomy.vn/images/upload/2023/10/18/tieu-chi-du-an-ung-dung-cong-nghe-cao-de-san-xuat-san-pham-cong-nghe-cao.jpg",
           "description": "Dự án 1 (tạm thời để như thế)",
-          "todos": [],
-          "members": []
+          "todos": [
+            {
+              "id": "t1759970380117",
+              "title": "Xây dựng lồng kính",
+              "personChange": {
+                "id": "u001",
+                "username": "nguyenvana",
+                "email": "a@example.com",
+                "role": "Designer"
+              },
+              "status": "to-do",
+              "startDate": "2025-10-10",
+              "endDate": "2025-10-25",
+              "priority": "medium",
+              "progress": "scheduled"
+            }
+          ],
+          "members": [
+            {
+              "id": "u001",
+              "username": "nguyenvana",
+              "email": "a@example.com",
+              "role": "Designer"
+            }
+          ]
         },
         {
           "id": 5,

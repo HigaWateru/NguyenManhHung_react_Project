@@ -1,9 +1,9 @@
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import { fetchMyTask } from '@/apis/auth.api'
+import { changeStatus, fetchMyTask } from '@/apis/auth.api'
 import type { AppDispatch, RootState } from '@/redux/store'
 import { useDispatch, useSelector } from 'react-redux'
-import { Select } from 'antd'
+import { Modal, Select } from 'antd'
 import React from 'react'
 import { CaretDownOutlined, CaretRightOutlined, EditOutlined } from '@ant-design/icons'
 
@@ -12,10 +12,10 @@ export default function MyTask() {
     const dispatch = useDispatch<AppDispatch>()
     const projects = useSelector((state: RootState) => state.mytask.projects) || []
     const [showTask, setShowTask] = React.useState<number[]>([])
+    const [openModal, setOpenModal] = React.useState<boolean>(false)
+    const [ID, setID] = React.useState<string>('')
 
     const toggleTask = (projectId: number) => setShowTask(prev => prev.includes(projectId) ? prev.filter(id => id !== projectId) : [...prev, projectId])
-
-    console.log(projects)
 
     React.useEffect(() => {
         dispatch(fetchMyTask({ search }))
@@ -57,7 +57,10 @@ export default function MyTask() {
                                             <td className="p-2 border border-gray-300">{task.name}</td>
                                             <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${task.priority === 'low' ? 'bg-[#0dcaf0]' : task.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
                                             }`}>{task.priority === 'low' ? 'Thấp' : task.priority === 'medium' ? 'Trung bình' : 'Cao'}</span></td>
-                                            <td className='text-center border border-gray-300 cursor-pointer font-medium'>{task.status === 'to-do' ? 'Todo' : task.status === 'in-progress' ? 'In Progress' : task.status === 'pending' ? 'Pending' : 'Done'} <EditOutlined/></td>
+                                            <td onClick={() => {
+                                                setID(task.id)
+                                                setOpenModal(true)
+                                            }} className='text-center border border-gray-300 cursor-pointer font-medium'>{task.status === 'to-do' ? 'Todo' : task.status === 'in-progress' ? 'In progress' : task.status === 'pending' ? 'Pending' : 'Done'} {task.status === 'in-progress' || task.status === 'pending' ? <EditOutlined/> : <></>}</td>
                                             <td className="text-center border border-gray-300 text-blue-600">{new Date(task.startDate).toLocaleDateString('vi-VN')}</td>
                                             <td className="text-center border border-gray-300 text-blue-600">{new Date(task.endDate).toLocaleDateString('vi-VN')}</td>
                                             <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${task.progress === 'scheduled' ? 'bg-[#198754]' : task.progress === 'in-progress' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
@@ -71,6 +74,19 @@ export default function MyTask() {
                 </div>
             </main>
             <Footer />
+            <Modal title='Cập nhật trạng thái' open={openModal} okText='Xác nhận' onCancel={() => {
+                setID('')
+                setOpenModal(false)
+            }} onOk={async() => {
+                if(ID) {
+                    await dispatch(changeStatus({ taskID: ID }))
+                    await dispatch(fetchMyTask({ search }))
+                } else console.log('Không tìm thấy id')
+                setID('')
+                setOpenModal(false)
+            }}>
+                <p>Xác nhận cập nhật trạng thái nhiệm vụ</p>
+            </Modal>
         </div>
     )
 }

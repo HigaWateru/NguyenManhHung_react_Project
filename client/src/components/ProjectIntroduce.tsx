@@ -1,11 +1,11 @@
 import { fetchTodo } from '@/apis/auth.api'
 import type { IMember } from '@/utils/types'
 import { DeleteOutlined, EllipsisOutlined } from '@ant-design/icons'
-import type { AppDispatch, RootState } from "@/redux/store";
+import type { AppDispatch, RootState } from "@/redux/store"
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { Modal } from 'antd';
+import { Modal } from 'antd'
 import { updateMember, deleteMember } from '@/apis/auth.api'
 import { addMember } from '@/apis/auth.api'
 
@@ -57,13 +57,15 @@ export default function ProjectIntroduce() {
                         ))}
 
                     </div>
-                    <div><span onClick={() => { 
-                        const init: Record<string, string> = {}; 
-                        (projectTodo?.members || []).forEach(m => { init[m.id] = m.role })
-                        setEditedRoles(init)
-                        setMembersToDelete({})
-                        setMemDetailModal(true)
-                    }} className='text-2xl font-bold px-1 rounded-4xl bg-[#e2e3e5] cursor-pointer'><EllipsisOutlined /></span></div>
+                    <div>
+                        <span onClick={() => { 
+                            const init: Record<string, string> = {};
+                            (projectTodo?.members || []).forEach(member => { init[member.id] = member.role })
+                            setEditedRoles(init)
+                            setMembersToDelete({})
+                            setMemDetailModal(true)
+                        }} className='text-2xl font-bold px-1 rounded-4xl bg-[#e2e3e5] cursor-pointer'><EllipsisOutlined /></span>
+                    </div>
                 </div>
             </div>
             <Modal open={addMemModal} title='Thêm thành viên' onCancel={() => {

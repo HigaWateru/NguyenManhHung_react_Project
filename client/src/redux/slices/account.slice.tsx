@@ -1,6 +1,6 @@
-import { login, register } from "@/apis/auth.api";
-import type { IUser } from "@/utils/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { login, register } from "@/apis/auth.api"
+import type { IUser } from "@/utils/types"
+import { createSlice } from "@reduxjs/toolkit"
 
 interface State {
     currentUser: IUser | null

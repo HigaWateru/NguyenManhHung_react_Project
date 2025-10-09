@@ -1,12 +1,12 @@
-import { addProject, deleteProject, fetchProject, updateProject, uploadImg } from "@/apis/auth.api";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import type { AppDispatch, RootState } from "@/redux/store";
-import type { IProject } from "@/utils/types";
-import { message, Modal, Pagination } from "antd";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { addProject, deleteProject, fetchProject, updateProject, uploadImg } from "@/apis/auth.api"
+import Footer from "@/components/Footer"
+import Header from "@/components/Header"
+import type { AppDispatch, RootState } from "@/redux/store"
+import type { IProject } from "@/utils/types"
+import { message, Modal, Pagination } from "antd"
+import React from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 export default function ProjectList() {
   const {list: projectList, total} = useSelector((state: RootState) => state.projectList)
@@ -103,7 +103,7 @@ export default function ProjectList() {
             setErrorMol({ name: "", image: "", description: "" })
             dispatch(fetchProject({ page: currPage, limit: 9, search }))
           } else if(addProject.rejected.match(response)) {
-            const payload = response.payload as { name?: string; description?: string }
+            const payload = response.payload as { name?: string, description?: string }
             setErrorMol({
               name: payload.name || "",
               image: "",
@@ -126,7 +126,7 @@ export default function ProjectList() {
             setErrorMol({ name: "", image: "", description: "" })
             dispatch(fetchProject({ page: currPage, limit: 9, search }))
           } else if(updateProject.rejected.match(response)) {
-            const payload = response.payload as { name?: string; description?: string }
+            const payload = response.payload as { name?: string, description?: string }
             setErrorMol({name: payload.name || "", image: "", description: payload.description || ""})
           }
         } catch (error) {
@@ -178,5 +178,5 @@ export default function ProjectList() {
     }} okText="Xoá" okType="danger">
       <p>Bạn có chắc chắn muốn xoá dự án này không?</p>
     </Modal>  
-  </div>;
+  </div>
 }

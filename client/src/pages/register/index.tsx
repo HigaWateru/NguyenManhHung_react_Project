@@ -1,7 +1,7 @@
-import type { IUser } from "@/utils/types";
-import axios from "axios";
-import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import type { IUser } from "@/utils/types"
+import axios from "axios"
+import React from "react"
+import { NavLink, useNavigate } from "react-router-dom"
 
 export default function Register() {
   const [formData, setFormData] = React.useState<{ name: string, email: string, password: string, confirm_password: string }>({ name: '', email: '', password: '', confirm_password: '' })
@@ -74,5 +74,5 @@ export default function Register() {
         <p className="w-full text-center text-gray-500">Đã có tài khoản? <NavLink className='font-semibold' to="/login">Đăng nhập</NavLink></p>
       </form>
     </div>
-  </div>;
+  </div>
 }

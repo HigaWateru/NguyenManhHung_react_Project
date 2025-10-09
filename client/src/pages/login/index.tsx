@@ -1,8 +1,8 @@
-import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { type AppDispatch, type RootState } from "../../redux/store";
-import { login } from "@/apis/auth.api";
+import React from "react"
+import { NavLink, useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { type AppDispatch, type RootState } from "../../redux/store"
+import { login } from "@/apis/auth.api"
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -32,7 +32,7 @@ export default function Login() {
     event.preventDefault()
     if(!validate()) return
     try {
-      await dispatch(login(loginData)).unwrap();
+      await dispatch(login(loginData)).unwrap()
       setIsSubmit(true)
       setFormError({ email: "", password: "" })
       setTimeout(() => navigate("/projects"), 1200)
@@ -69,5 +69,5 @@ export default function Login() {
         </form>
       </div>
     </div>
-  );
+  )
 }
