@@ -38,7 +38,8 @@ const projectSlice = createSlice({
             state.error = null
         })
         .addCase(addProject.fulfilled, (state, action) => {
-            state.list.push(action.payload)
+            state.list.unshift(action.payload)
+            state.total += 1
         })
         .addCase(addProject.rejected, (state, action) => {
             state.error = action.payload || {name: '', description: ''}

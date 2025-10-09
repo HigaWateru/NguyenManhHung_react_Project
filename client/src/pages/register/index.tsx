@@ -49,24 +49,36 @@ export default function Register() {
   return <div className="h-[100vh] w-[100vw] flex justify-center items-center">
     <div className="w-[400px] flex flex-col gap-6">
       <h1 className="text-4xl font-semibold text-center">Đăng ký</h1>
-      <form onSubmit={(event) => {
+      <form onSubmit={event => {
         event.preventDefault()
         handleRegister()
       }} action="" className="flex flex-col gap-5 mt-4 rounded-md p-5 shadow-lg border border-gray-100">
         <div className="flex flex-col gap-3">
-          <input value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} type="text" name="name" id="name" placeholder="Họ và tên" className="border border-gray-300 rounded-md p-3 outline-none"/>
+          <input value={formData.name} onChange={event => {
+            setError({...error, name: ''})
+            setFormData({...formData, name: event.target.value})
+          }} type="text" name="name" id="name" placeholder="Họ và tên" className="border border-gray-300 rounded-md p-3 outline-none"/>
           <p className="text-red-500 text-sm">{error.name}</p>
         </div>
         <div className="flex flex-col gap-3">
-          <input value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} type="email" name="email" id="email" placeholder="Địa chỉ Email" className="border border-gray-300 rounded-md p-3 outline-none"/>
+          <input value={formData.email} onChange={event => {
+            setError({...error, email: ''})
+            setFormData({...formData, email: event.target.value})
+          }} type="email" name="email" id="email" placeholder="Địa chỉ Email" className="border border-gray-300 rounded-md p-3 outline-none"/>
           <p className="text-red-500 text-sm">{error.email}</p>
         </div>
         <div className="flex flex-col gap-3">
-          <input value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} type="password" name="password" id="password" placeholder="Mật khẩu" className="border border-gray-300 rounded-md p-3 outline-none"/>
+          <input value={formData.password} onChange={event => {
+            setError({ ...error, password: ''})
+            setFormData({...formData, password: event.target.value})
+          }} type="password" name="password" id="password" placeholder="Mật khẩu" className="border border-gray-300 rounded-md p-3 outline-none"/>
           <p className="text-red-500 text-sm">{error.password}</p>
         </div>
         <div className="flex flex-col gap-3">
-          <input value={formData.confirm_password} onChange={e => setFormData({ ...formData, confirm_password: e.target.value })} type="password" name="confirm_password" id="confirm_password" placeholder="Xác nhận mật khẩu" className="border border-gray-300 rounded-md p-3 outline-none"/>
+          <input value={formData.confirm_password} onChange={event => {
+            setError({...error, confirm_password: ''})
+            setFormData({...formData, confirm_password: event.target.value})
+          }} type="password" name="confirm_password" id="confirm_password" placeholder="Xác nhận mật khẩu" className="border border-gray-300 rounded-md p-3 outline-none"/>
           <p className="text-red-500 text-sm">{error.confirm_password}</p>
         </div>
         <p className="text-green-500 text-sm">{isSubmit && '✓ Đăng ký thành công!'}</p>

@@ -32,9 +32,7 @@ export default function ProjectList() {
   }
 
   React.useEffect(() => {
-    const timeout = setTimeout(() => {
-      dispatch(fetchProject({ page: currPage, limit: 9, search }))
-    }, 200)
+    const timeout = setTimeout(() => dispatch(fetchProject({ page: currPage, limit: 9, search })), 200)
     return () => clearTimeout(timeout)
   }, [search, dispatch, currPage])
 
@@ -136,7 +134,10 @@ export default function ProjectList() {
     }}>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Tên dự án</label>
-        <input value={formData.name} onChange={event => setFormData({...formData, name: event.target.value})} type="text" className="border border-gray-300 rounded-md p-3 outline-none " />
+        <input value={formData.name} onChange={event => {
+          setErrorMol({...errorMol, name: ''})
+          setFormData({...formData, name: event.target.value})
+        }} type="text" className="border border-gray-300 rounded-md p-3 outline-none " />
         <p className="text-red-500 text-sm">{errorMol.name}</p>
       </div>
       <div className="flex flex-col gap-2">
@@ -156,7 +157,10 @@ export default function ProjectList() {
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Mô tả dự án</label>
-        <textarea value={formData.description} onChange={event => setFormData({...formData, description: event.target.value})} name="description" id="description" className="w-full h-[100px] border border-gray-300 rounded-md p-3 outline-none"></textarea>
+        <textarea value={formData.description} onChange={event => {
+          setErrorMol({...errorMol, description: ''})
+          setFormData({...formData, description: event.target.value})
+        }} name="description" id="description" className="w-full h-[100px] border border-gray-300 rounded-md p-3 outline-none"></textarea>
         <p className="text-red-500 text-sm">{errorMol.description}</p>
       </div>
     </Modal>

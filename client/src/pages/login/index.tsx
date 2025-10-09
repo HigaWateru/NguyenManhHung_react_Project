@@ -49,16 +49,18 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-4 p-5 shadow-lg border border-gray-100 rounded-md">
           <div className="flex flex-col gap-2">
             <label className="font-medium">Email</label>
-            <input type="email" value={loginData.email} onChange={(e) => {
-                setLoginData({ ...loginData, email: e.target.value })
+            <input type="email" value={loginData.email} onChange={event => {
+                setFormError({...formError, email: ''})
+                setLoginData({...loginData, email: event.target.value})
                 setFormError(prev => ({ ...prev, email: "" }))
               }} className="border border-gray-300 rounded-md p-3 outline-none"/>
             <p className="text-red-500 text-sm">{formError.email || error?.email}</p>
           </div>
           <div className="flex flex-col gap-2">
             <label className="font-medium">Mật khẩu</label>
-            <input type="password" value={loginData.password} onChange={(e) => {
-                setLoginData({ ...loginData, password: e.target.value })
+            <input type="password" value={loginData.password} onChange={event => {
+                setFormError({...formError, password: ''})
+                setLoginData({...loginData, password: event.target.value})
                 setFormError(prev => ({ ...prev, password: "" }))
               }} className="border border-gray-300 rounded-md p-3 outline-none"/>
             <p className="text-red-500 text-sm">{formError.password || error?.password}</p>

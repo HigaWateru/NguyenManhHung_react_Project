@@ -18,7 +18,8 @@ export default function MyTask() {
     const toggleTask = (projectId: number) => setShowTask(prev => prev.includes(projectId) ? prev.filter(id => id !== projectId) : [...prev, projectId])
 
     React.useEffect(() => {
-        dispatch(fetchMyTask({ search }))
+        const timeout = setTimeout(() => dispatch(fetchMyTask({ search })), 200)
+        return () => clearTimeout(timeout)
     }, [dispatch, search])
     return (
         <div className="h-[100vh] w-[100vw] flex flex-col justify-between">
@@ -28,9 +29,8 @@ export default function MyTask() {
                     <h2 className='font-semibold text-2xl mb-6 w-full self-start'>Quản lý nhiệm vụ</h2>
                     <div className="flex gap-4 w-full justify-end">
                         <Select style={{ width: 200, height: 40 }} placeholder="Sắp xếp theo" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
-                            { value: 'todo', label: 'To do' },
-                            { value: 'inprogress', label: 'In progress' },
-                            { value: 'done', label: 'Done' }
+                            { value: 'todo', label: 'Hạn chót' },
+                            { value: 'inprogress', label: 'Độ ưu tiên' }
                         ]} />
                         <input value={search} onChange={e => setSearch(e.target.value)} className="border border-gray-300 rounded-md px-3 py-1 outline-none w-[300px]" type="text" placeholder="Tìm kiếm nhiệm vụ" />
                     </div>
