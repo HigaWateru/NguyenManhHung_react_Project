@@ -86,7 +86,7 @@
                 "email": "a@example.com",
                 "role": "Designer"
               },
-              "status": "in-progress",
+              "status": "pending",
               "startDate": "2025-10-29",
               "endDate": "2025-11-06",
               "priority": "high",
@@ -105,7 +105,7 @@
               "startDate": "2025-10-11",
               "endDate": "2025-10-31",
               "priority": "high",
-              "progress": "scheduled"
+              "progress": "in-progress"
             }
           ]
         },
@@ -210,10 +210,10 @@
                 "email": "a@example.com",
                 "role": "Designer"
               },
-              "status": "pending",
-              "startDate": "2025-10-09",
-              "endDate": "2025-11-11",
-              "priority": "medium",
+              "status": "in-progress",
+              "startDate": "2025-10-29",
+              "endDate": "2025-11-08",
+              "priority": "high",
               "progress": "in-progress"
             }
           ]
@@ -263,7 +263,7 @@
                 "email": "sytrung@gmail.com",
                 "role": "Back-end developer"
               },
-              "status": "pending",
+              "status": "in-progress",
               "startDate": "2025-10-12",
               "endDate": "2025-11-06",
               "priority": "high",

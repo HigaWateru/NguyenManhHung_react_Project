@@ -5,6 +5,7 @@ import ProductDetail from "@/pages/projectManager/ProjectDetail";
 import ProjectList from "@/pages/projectManager/ProjectList";
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
+import ProtectedRouter from "./ProtectRouter";
 
 const Login = React.lazy(() => import("@/pages/login"));
 const Register = React.lazy(() => import("@/pages/register"));
@@ -20,15 +21,21 @@ const routers = createBrowserRouter([
   },
   {
     path: "/projects",
-    element: <LazyLoad children={<ProjectList />} />,
+    element: <ProtectedRouter>
+      <LazyLoad children={<ProjectList />} />
+    </ProtectedRouter>,
   },
   {
     path: "projects/:id",
-    element: <LazyLoad children={<ProductDetail/>}/>,
+    element: <ProtectedRouter>
+       <LazyLoad children={<ProductDetail/>}/>
+    </ProtectedRouter>,
   },
   {
     path: "mytask",
-    element: <LazyLoad children={<MyTask/>}/>
+    element: <ProtectedRouter>
+      <LazyLoad children={<MyTask/>}/>
+    </ProtectedRouter>
   },
   {
     path: "*",

@@ -64,9 +64,6 @@ export default function ProjectDetail() {
     return sortedTask
   }
 
-  console.log(handleSort(todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase()))))
-
-
   React.useEffect(() => {
     const timeout = setTimeout(() => dispatch(fetchTodo({ projectId: Number(id), search })), 200)
     return () => clearTimeout(timeout)
@@ -83,7 +80,7 @@ export default function ProjectDetail() {
             setOpenModal(true)
           }} className="bg-[#007bff] text-white px-3 py-1 rounded-md cursor-pointer">+ Thêm nhiệm vụ</button>
           <div className="flex gap-4">
-            <Select value={sort} style={{ width: 200, height: 40 }} placeholder="Sắp xếp theo" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
+            <Select value={sort} style={{width: 200, height: 40}} placeholder="Sắp xếp theo" optionFilterProp="children" filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())} options={[
               { value: 'endDate', label: 'Hạn chót' },
               { value: 'priority', label: 'Độ ưu tiên' }
             ]} onChange={value => setSort(value as 'endDate' | 'priority')} />
@@ -105,7 +102,7 @@ export default function ProjectDetail() {
               <th scope="col" className="px-6 py-3 text-center border border-gray-300 text-[14px] font-semibold">Hành động</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             <tr onClick={() => setTableOpt({ ...tableOpt, todo: !tableOpt.todo })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.todo ? <CaretDownOutlined /> : <CaretRightOutlined />} Todo ({todos.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
             {handleSort(todos.filter((todo: Todo) => todo.status === 'to-do' && todo.title.toLowerCase().includes(search.toLowerCase()))).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.todo ? '' : 'hidden'}>
@@ -121,7 +118,7 @@ export default function ProjectDetail() {
                   <div className="flex justify-center gap-3 ">
                     <button onClick={() => {
                       setOptModal('edit')
-                      setFormData({ name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress })
+                      setFormData({name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress})
                       setID(todo.id)
                       setOpenModal(true)
                     }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
@@ -133,7 +130,7 @@ export default function ProjectDetail() {
                 </td>
               </tr>
             ))}
-            <tr onClick={() => setTableOpt({ ...tableOpt, inProgress: !tableOpt.inProgress })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.inProgress ? <CaretDownOutlined /> : <CaretRightOutlined />} In Progress ({todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
+            <tr onClick={() => setTableOpt({...tableOpt, inProgress: !tableOpt.inProgress})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.inProgress ? <CaretDownOutlined /> : <CaretRightOutlined />} In Progress ({todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
             {handleSort(todos.filter((todo: Todo) => todo.status === 'in-progress' && todo.title.toLowerCase().includes(search.toLowerCase()))).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.inProgress ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
@@ -148,7 +145,7 @@ export default function ProjectDetail() {
                   <div className="flex justify-center gap-3 ">
                     <button onClick={() => {
                       setOptModal('edit')
-                      setFormData({ name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress })
+                      setFormData({name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress})
                       setID(todo.id)
                       setOpenModal(true)
                     }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
@@ -160,7 +157,7 @@ export default function ProjectDetail() {
                 </td>
               </tr>
             ))}
-            <tr onClick={() => setTableOpt({ ...tableOpt, pending: !tableOpt.pending })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.pending ? <CaretDownOutlined /> : <CaretRightOutlined />} Pending ({todos.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
+            <tr onClick={() => setTableOpt({...tableOpt, pending: !tableOpt.pending})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.pending ? <CaretDownOutlined /> : <CaretRightOutlined />} Pending ({todos.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
             {handleSort(todos.filter((todo: Todo) => todo.status === 'pending' && todo.title.toLowerCase().includes(search.toLowerCase()))).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.pending ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
@@ -175,7 +172,7 @@ export default function ProjectDetail() {
                   <div className="flex justify-center gap-3 ">
                     <button onClick={() => {
                       setOptModal('edit')
-                      setFormData({ name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress })
+                      setFormData({name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress})
                       setID(todo.id)
                       setOpenModal(true)
                     }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
@@ -187,7 +184,7 @@ export default function ProjectDetail() {
                 </td>
               </tr>
             ))}
-            <tr onClick={() => setTableOpt({ ...tableOpt, done: !tableOpt.done })} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.done ? <CaretDownOutlined /> : <CaretRightOutlined />} Done ({todos.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
+            <tr onClick={() => setTableOpt({...tableOpt, done: !tableOpt.done})} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{tableOpt.done ? <CaretDownOutlined /> : <CaretRightOutlined />} Done ({todos.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase())).length})</td></tr>
             {handleSort(todos.filter((todo: Todo) => todo.status === 'done' && todo.title.toLowerCase().includes(search.toLowerCase()))).map((todo: Todo) => (
               <tr key={todo.id} className={tableOpt.done ? '' : 'hidden'}>
                 <td className="p-2 border border-gray-300">{todo.title}</td>
@@ -202,7 +199,7 @@ export default function ProjectDetail() {
                   <div className="flex justify-center gap-3 ">
                     <button onClick={() => {
                       setOptModal('edit')
-                      setFormData({ name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress })
+                      setFormData({name: todo.title, personChange: todo.personChange.username, status: todo.status, startDate: todo.startDate, endDate: todo.endDate, priority: todo.priority, progress: todo.progress})
                       setID(todo.id)
                       setOpenModal(true)
                     }} className="p-3 py-1 bg-[#ffc107] text-[14px] rounded-md cursor-pointer">Sửa</button>
@@ -215,7 +212,6 @@ export default function ProjectDetail() {
               </tr>
             ))}
           </tbody>
-          <tbody className="bg-white divide-y divide-gray-200"></tbody>
         </table>
       </div>
     </main>
@@ -228,7 +224,7 @@ export default function ProjectDetail() {
       if (!validate()) return
       const member = project!.members.find(member => member.username === formData.personChange)
       if (!member) {
-        setErrorMol(prev => ({ ...prev, personChange: "Người phụ trách không hợp lệ" }))
+        setErrorMol(prev => ({...prev, personChange: "Người phụ trách không hợp lệ"}))
         return
       }
       if (optModal === 'add') {
@@ -244,7 +240,7 @@ export default function ProjectDetail() {
           }
           const result = await dispatch(addTodo({ projectId: project!.id.toString(), newTodo }))
           if (addTodo.rejected.match(result)) {
-            setErrorMol(prev => ({ ...prev, name: result.payload as string }))
+            setErrorMol(prev => ({...prev, name: result.payload as string}))
             return
           }
           setOpenModal(false)
@@ -265,11 +261,11 @@ export default function ProjectDetail() {
           }
           const result = await dispatch(updateTodo({ projectId: project!.id.toString(), todoId: ID, updated }))
           if (updateTodo.rejected.match(result)) {
-            setErrorMol(prev => ({ ...prev, name: result.payload as string }))
+            setErrorMol(prev => ({...prev, name: result.payload as string}))
             return
           }
           setOpenModal(false)
-          setFormData({ name: "", personChange: "", status: null, startDate: "", endDate: "", priority: null, progress: null })
+          setFormData({name: "", personChange: "", status: null, startDate: "", endDate: "", priority: null, progress: null})
         } catch {
           console.log('Lỗi sửa nhiệm vụ')
         }
@@ -278,8 +274,8 @@ export default function ProjectDetail() {
       <div className="flex flex-col gap-2">
         <label className="font-medium">Tên nhiệm vụ</label>
         <input onChange={event => {
-          setErrorMol({ ...errorMol, name: '' })
-          setFormData({ ...formData, name: event.target.value })
+          setErrorMol({...errorMol, name: ''})
+          setFormData({...formData, name: event.target.value})
         }} value={formData.name} type="text" className="border border-gray-300 rounded-md p-3 outline-none" />
         <p className="text-red-500 text-sm">{errorMol.name}</p>
       </div>
@@ -290,8 +286,8 @@ export default function ProjectDetail() {
             value: member.username, label: member.username
           }))
         } onChange={value => {
-          setErrorMol({ ...errorMol, personChange: '' })
-          setFormData({ ...formData, personChange: value })
+          setErrorMol({...errorMol, personChange: ''})
+          setFormData({...formData, personChange: value})
         }} />
         <p className="text-red-500 text-sm">{errorMol.personChange}</p>
       </div>
@@ -303,24 +299,24 @@ export default function ProjectDetail() {
           { value: 'pending', label: 'Pending' },
           { value: 'done', label: 'Done' }
         ]} onChange={value => {
-          setErrorMol({ ...errorMol, status: '' })
-          setFormData({ ...formData, status: value })
+          setErrorMol({...errorMol, status: ''})
+          setFormData({...formData, status: value})
         }} />
         <p className="text-red-500 text-sm">{errorMol.status}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Ngày bắt đầu</label>
         <input onChange={event => {
-          setErrorMol({ ...errorMol, startDate: '' })
-          setFormData({ ...formData, startDate: event.target.value })
+          setErrorMol({...errorMol, startDate: ''})
+          setFormData({...formData, startDate: event.target.value})
         }} value={formData.startDate} type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
         <p className="text-red-500 text-sm">{errorMol.startDate}</p>
       </div>
       <div className="flex flex-col gap-2">
         <label className="font-medium">Ngày kết thúc</label>
         <input onChange={event => {
-          setErrorMol({ ...errorMol, endDate: '' })
-          setFormData({ ...formData, endDate: event.target.value })
+          setErrorMol({...errorMol, endDate: ''})
+          setFormData({...formData, endDate: event.target.value})
         }} value={formData.endDate} type="date" className="border border-gray-300 rounded-md p-3 outline-none" />
         <p className="text-red-500 text-sm">{errorMol.endDate}</p>
       </div>
@@ -331,8 +327,8 @@ export default function ProjectDetail() {
           { value: 'medium', label: 'Trung bình' },
           { value: 'high', label: 'Cao' }
         ]} onChange={value => {
-          setErrorMol({ ...errorMol, priority: '' })
-          setFormData({ ...formData, priority: value })
+          setErrorMol({...errorMol, priority: ''})
+          setFormData({...formData, priority: value})
         }} />
         <p className="text-red-500 text-sm">{errorMol.priority}</p>
       </div>
@@ -343,8 +339,8 @@ export default function ProjectDetail() {
           { value: 'in-progress', label: 'Có rủi ro' },
           { value: 'delayed', label: 'Trễ hạn' }
         ]} onChange={value => {
-          setErrorMol({ ...errorMol, progress: '' })
-          setFormData({ ...formData, progress: value })
+          setErrorMol({...errorMol, progress: ''})
+          setFormData({...formData, progress: value})
         }} />
         <p className="text-red-500 text-sm">{errorMol.progress}</p>
       </div>
