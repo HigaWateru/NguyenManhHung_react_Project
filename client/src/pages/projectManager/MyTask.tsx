@@ -17,7 +17,24 @@ export default function MyTask() {
     const [ID, setID] = React.useState<string>('')
 
     const toggleTask = (projectId: number) => setShowTask(prev => prev.includes(projectId) ? prev.filter(id => id !== projectId) : [...prev, projectId])
-
+    const handleSort = (tasks: {
+        id: string
+        name: string
+        priority: 'low' | 'medium' | 'high'
+        status: 'to-do' | 'in-progress' | 'pending' | 'done'
+        startDate: string
+        endDate: string
+        progress: 'scheduled' | 'in-progress' | 'delayed'
+    }[]) => {
+        if (!sort) return tasks
+        const sortedTask = [...tasks]
+        if (sort === 'endDate') sortedTask.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime())
+        if (sort === 'priority') {
+            const order = { high: 1, medium: 2, low: 3 }
+            sortedTask.sort((a, b) => order[a.priority] - order[b.priority])
+        }
+        return sortedTask
+    }
     React.useEffect(() => {
         const timeout = setTimeout(() => dispatch(fetchMyTask({ search })), 200)
         return () => clearTimeout(timeout)
@@ -53,7 +70,7 @@ export default function MyTask() {
                             {projects.map(project => (
                                 <React.Fragment key={project.id}>
                                     <tr onClick={() => toggleTask(project.id)} className="border border-gray-300"><td className="p-2 font-semibold text-[14px] cursor-pointer">{project.name} {showTask.includes(project.id) ? <CaretDownOutlined /> : <CaretRightOutlined />}</td></tr>
-                                    {project.tasks.map(task => (
+                                    {handleSort(project.tasks).map(task => (
                                         <tr key={task.id} className={showTask.includes(project.id) ? '' : 'hidden'}>
                                             <td className="p-2 border border-gray-300">{task.name}</td>
                                             <td className="text-center border border-gray-300"><span className={`text-white font-medium text-[12px] px-2 py-1 rounded ${task.priority === 'low' ? 'bg-[#0dcaf0]' : task.priority === 'medium' ? 'bg-[#ffc107]' : 'bg-[#dc3545]'
